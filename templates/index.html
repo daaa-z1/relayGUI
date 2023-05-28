@@ -1,39 +1,117 @@
 <!DOCTYPE html>
 <html>
-<head>
-   <title>GPIO Control</title>
-   <!-- Latest compiled and minified CSS -->
-   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
-   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-</head>
-<body>
-   <div class="container">
+  <head>
+    <title>GPIO Control</title>
+    <!-- Latest compiled and minified CSS -->
+    <link
+      rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+    />
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  </head>
+  <body>
+    <div class="container">
       <h1>GPIO Control</h1>
 
-      <div class="row">
-         {% for pin in pins %}
-         <div class="col-md-4">
-            <div class="card mt-4 shadow">
-               <div class="card-body">
-                  <h5 class="card-title">Pin {{ pin[0] }}</h5>
-                  <p class="card-text">{{ pin[1] }}</p>
-                  <p>Status: <strong>{{ "ON" if pin[2] == 1 else "OFF" }}</strong></p>
-                  <form action="/toggle_pin/{{ pin[0] }}" method="post">
-                     <input type="hidden" name="state" value="{{ 0 if pin[2] == 1 else 1 }}">
-                     <button type="submit" class="btn btn-sm btn-{{ 'success' if pin[2] == 1 else 'danger' }}">
-                        {{ 'Turn Off' if pin[2] == 1 else 'Turn On' }}
-                     </button>
-                  </form>
-                  <form action="/delete_pin/{{ pin[0] }}" method="post">
-                     <button type="submit" class="btn btn-sm btn-danger">Delete</button>
-                  </form>
-               </div>
+      <div class="container">
+        <h1>GPIO Control</h1>
+
+        <!-- Tombol "Setting" untuk membuka modal -->
+        <button
+          type="button"
+          class="btn btn-primary"
+          data-toggle="modal"
+          data-target="#addPinModal"
+        >
+          Setting
+        </button>
+
+        <!-- Modal untuk form "Add Pin" -->
+        <div
+          class="modal fade"
+          id="addPinModal"
+          tabindex="-1"
+          role="dialog"
+          aria-labelledby="addPinModalLabel"
+          aria-hidden="true"
+        >
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="addPinModalLabel">Add Pin</h5>
+                <button
+                  type="button"
+                  class="close"
+                  data-dismiss="modal"
+                  aria-label="Close"
+                >
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                <form action="/add_pin" method="post">
+                  <div class="form-group">
+                    <label for="pin_number">Pin Number:</label>
+                    <input
+                      type="number"
+                      class="form-control"
+                      id="pin_number"
+                      name="pin_number"
+                      required
+                    />
+                  </div>
+                  <div class="form-group">
+                    <label for="name">Name:</label>
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="name"
+                      name="name"
+                      required
+                    />
+                  </div>
+                  <button type="submit" class="btn btn-primary">Add</button>
+                </form>
+              </div>
             </div>
-         </div>
-         {% endfor %}
+          </div>
+        </div>
+
+      <div class="row">
+        {% for pin in pins %}
+        <div class="col-md-4">
+          <div class="card mt-4 shadow">
+            <div class="card-body">
+              <h5 class="card-title">Pin {{ pin[0] }}</h5>
+              <p class="card-text">{{ pin[1] }}</p>
+              <p class="card-text text-muted">
+                Status: <strong>{{ "ON" if pin[2] == 1 else "OFF" }}</strong>
+              </p>
+              <form action="/toggle_pin/{{ pin[0] }}" method="post">
+                <input
+                  type="hidden"
+                  name="state"
+                  value="{{ 0 if pin[2] == 1 else 1 }}"
+                />
+                <button
+                  type="submit"
+                  class="btn btn-sm btn-{{ 'success' if pin[2] == 1 else 'danger' }}"
+                >
+                  {{ 'Turn Off' if pin[2] == 1 else 'Turn On' }}
+                </button>
+              </form>
+              <form action="/delete_pin/{{ pin[0] }}" method="post">
+                <button type="submit" class="btn btn-sm btn-danger">
+                  Delete
+                </button>
+              </form>
+            </div>
+          </div>
+        </div>
+        {% endfor %}
       </div>
 
-      <h2 class="mt-4">Add Pin</h2>
+      <!-- <h2 class="mt-4">Add Pin</h2>
       <form action="/add_pin" method="post">
          <div class="form-group">
             <label for="pin_number">Pin Number:</label>
@@ -44,21 +122,21 @@
             <input type="text" class="form-control" id="name" name="name" required>
          </div>
          <button type="submit" class="btn btn-primary">Add</button>
-      </form>
-   </div>
+      </form> -->
+    </div>
 
-   <!-- Latest compiled and minified JavaScript -->
-   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
-   <script>
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <script>
       // Fungsi untuk memuat ulang halaman setelah perintah dikirim
       function reloadPage() {
-         location.reload();
+        location.reload();
       }
 
       // Memuat ulang halaman setelah mengirim perintah toggle_pin atau delete_pin
-      $('form').submit(function() {
-         setTimeout(reloadPage, 1000); // Waktu tunda 1 detik (1000ms) sebelum memuat ulang halaman
+      $("form").submit(function () {
+        setTimeout(reloadPage, 1000); // Waktu tunda 1 detik (1000ms) sebelum memuat ulang halaman
       });
-   </script>
-</body>
+    </script>
+  </body>
 </html>
