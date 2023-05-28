@@ -4,6 +4,7 @@
    <title>GPIO Control</title>
    <!-- Latest compiled and minified CSS -->
    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
    <div class="container">
@@ -48,12 +49,16 @@
 
    <!-- Latest compiled and minified JavaScript -->
    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-
    <script>
-      // Auto-reload page every 5 seconds
-      setInterval(function() {
+      // Fungsi untuk memuat ulang halaman setelah perintah dikirim
+      function reloadPage() {
          location.reload();
-      }, 5000);
+      }
+
+      // Memuat ulang halaman setelah mengirim perintah toggle_pin atau delete_pin
+      $('form').submit(function() {
+         setTimeout(reloadPage, 1000); // Waktu tunda 1 detik (1000ms) sebelum memuat ulang halaman
+      });
    </script>
 </body>
 </html>
