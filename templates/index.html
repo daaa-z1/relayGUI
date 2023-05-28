@@ -13,69 +13,66 @@
     <div class="container">
       <h1>GPIO Control</h1>
 
-      <div class="container">
-        <h1>GPIO Control</h1>
+      <!-- Tombol "Setting" untuk membuka modal -->
+      <button
+        type="button"
+        class="btn btn-primary"
+        data-toggle="modal"
+        data-target="#addPinModal"
+      >
+        Setting
+      </button>
 
-        <!-- Tombol "Setting" untuk membuka modal -->
-        <button
-          type="button"
-          class="btn btn-primary"
-          data-toggle="modal"
-          data-target="#addPinModal"
-        >
-          Setting
-        </button>
-
-        <!-- Modal untuk form "Add Pin" -->
-        <div
-          class="modal fade"
-          id="addPinModal"
-          tabindex="-1"
-          role="dialog"
-          aria-labelledby="addPinModalLabel"
-          aria-hidden="true"
-        >
-          <div class="modal-dialog" role="document">
-            <div class="modal-content">
-              <div class="modal-header">
-                <h5 class="modal-title" id="addPinModalLabel">Add Pin</h5>
-                <button
-                  type="button"
-                  class="close"
-                  data-dismiss="modal"
-                  aria-label="Close"
-                >
-                  <span aria-hidden="true">&times;</span>
-                </button>
-              </div>
-              <div class="modal-body">
-                <form action="/add_pin" method="post">
-                  <div class="form-group">
-                    <label for="pin_number">Pin Number:</label>
-                    <input
-                      type="number"
-                      class="form-control"
-                      id="pin_number"
-                      name="pin_number"
-                      required
-                    />
-                  </div>
-                  <div class="form-group">
-                    <label for="name">Name:</label>
-                    <input
-                      type="text"
-                      class="form-control"
-                      id="name"
-                      name="name"
-                      required
-                    />
-                  </div>
-                  <button type="submit" class="btn btn-primary">Add</button>
-                </form>
-              </div>
+      <!-- Modal untuk form "Add Pin" -->
+      <div
+        class="modal fade"
+        id="addPinModal"
+        tabindex="-1"
+        role="dialog"
+        aria-labelledby="addPinModalLabel"
+        aria-hidden="true"
+      >
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="addPinModalLabel">Add Pin</h5>
+              <button
+                type="button"
+                class="close"
+                data-dismiss="modal"
+                aria-label="Close"
+              >
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <form action="/add_pin" method="post">
+                <div class="form-group">
+                  <label for="pin_number">Pin Number:</label>
+                  <input
+                    type="number"
+                    class="form-control"
+                    id="pin_number"
+                    name="pin_number"
+                    required
+                  />
+                </div>
+                <div class="form-group">
+                  <label for="name">Name:</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="name"
+                    name="name"
+                    required
+                  />
+                </div>
+                <button type="submit" class="btn btn-primary">Add</button>
+              </form>
             </div>
           </div>
         </div>
+      </div>
 
       <div class="row">
         {% for pin in pins %}
