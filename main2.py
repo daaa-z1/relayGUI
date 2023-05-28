@@ -82,7 +82,7 @@ def toggle_pin(pin_number):
     state = request.form['state']
     wp.digitalWrite(pin_number, int(state))
     update_pin_state(pin_number, int(state))
-    return redirect("/")
+    return redirect('/')
 
 
 @app.route('/add_pin', methods=['POST'])
@@ -91,13 +91,13 @@ def add_pin_route():
     name = request.form['name']
     add_pin(pin_number, name)
     setup_pins()  # Set up the newly added pin
-    return redirect("/")
+    return redirect('/')
 
 
 @app.route('/delete_pin/<int:pin_number>', methods=['POST'])
 def delete_pin_route(pin_number):
     delete_pin(pin_number)
-    return redirect("/")
+    return redirect('/')
 
 
 if __name__ == '__main__':
