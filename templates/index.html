@@ -3,7 +3,7 @@
 <head>
    <title>GPIO Control</title>
    <!-- Latest compiled and minified CSS -->
-   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
@@ -13,7 +13,7 @@
       <div class="row">
          {% for pin in pins %}
          <div class="col-md-4">
-            <div class="card">
+            <div class="card mt-4 shadow">
                <div class="card-body">
                   <h5 class="card-title">Pin {{ pin[0] }}</h5>
                   <p class="card-text">{{ pin[1] }}</p>
@@ -33,7 +33,7 @@
          {% endfor %}
       </div>
 
-      <h2>Add Pin</h2>
+      <h2 class="mt-4">Add Pin</h2>
       <form action="/add_pin" method="post">
          <div class="form-group">
             <label for="pin_number">Pin Number:</label>
@@ -48,7 +48,7 @@
    </div>
 
    <!-- Latest compiled and minified JavaScript -->
-   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
    <script>
       // Fungsi untuk memuat ulang halaman setelah perintah dikirim
       function reloadPage() {
