@@ -1,66 +1,63 @@
-import tkinter as tk
-from tkinter import ttk
+import wiringpi
+from flask import Flask, render_template, request
+app = Flask(__name__)
 
-try:
-    import wiringpi, sys
-    from wiringpi import GPIO
-    wiringpi.wiringPiSetup()
-    for i in range(4):
-        wiringpi.pinMode(i, GPIO.OUTPUT)
-except ImportError:
-    wiringpi = None
+wiringpi.wiringPiSetup()
 
-def relay_control(pin):
-    if wiringpi is not None:
-        try:
-            while True:
-                wiringpi.digitalWrite(pin, GPIO.HIGH)
-        except KeyboardInterrupt:
-            print(f"{pin} closed")
-            wiringpi.digitalWrite(pin, GPIO.LOW)
-            sys.exit(0)
-    else:
-        print("WiringPi library is not available.")
+# Create a dictionary called pins to store the pin number, name, and pin state:
+pins = {
+    0: {'name': 'GPIO 0', 'state': 0},
+    1: {'name': 'GPIO 1', 'state': 0}
+}
 
-def button_click(button, pin):
-    current_state = button["text"]
-    new_state = "Open" if current_state == "Close" else "Close"
-    button.configure(text=new_state)
-    if new_state == "Open":
-        button.configure(style="Green.TButton")
-    else:
-        button.configure(style="Red.TButton")
-    relay_control(pin)
+# Set each pin as an output and make it low:
+for pin in pins:
+    wiringpi.pinMode(pin, 1)
+    wiringpi.digitalWrite(pin, 0)
 
-root = tk.Tk()
-root.title("Gate Control GUI")
 
-# Create a frame to hold the cards
-frame = ttk.Frame(root, padding=20)
-frame.pack(fill='both', expand=True)
+@app.route("/")
+def main():
+    # For each pin, read the pin state and store it in the pins dictionary:
+    for pin in pins:
+        pins[pin]['state'] = wiringpi.digitalRead(pin)
+    # Put the pin dictionary into the template data dictionary:
+    templateData = {
+        'pins': pins
+    }
+    # Pass the template data into the template main.html and return it to the user
+    return render_template('main.html', **templateData)
 
-# Create Label for title
-header_label = tk.Label(frame, text="Gate Control GUI", font=("Helvetica", 16))
-header_label.grid(row=0, column=0, columnspan=2, pady=5)
+# The function below is executed when someone requests a URL with the pin number and action in it:
 
-# Create four cards with buttons
-for i in range(4):
-    pin = i + 1
-    
-    card_frame = ttk.Frame(frame, relief="solid", padding=10)
-    card_frame.grid(row=(i // 2) + 1, column=i % 2, padx=10, pady=10, sticky='nsew')
-    frame.columnconfigure(i % 2, weight=1)
-    frame.rowconfigure((i // 2) + 1, weight=1)
-    
-    label = tk.Label(card_frame, text=f"{'East' if i == 0 else 'West' if i == 1 else 'North' if i == 2 else 'South'} Lobby")
-    label.pack(pady=5)
 
-    button_style = ttk.Style()
-    button_style.configure("Red.TButton", foreground="black", background="red")
-    button_style.configure("Green.TButton", foreground="black", background="green")
+@app.route("/<changePin>/<action>")
+def action(changePin, action):
+    # Convert the pin from the URL into an integer:
+    changePin = int(changePin)
+    # Get the device name for the pin being changed:
+    deviceName = pins[changePin]['name']
+    # If the action part of the URL is "on," execute the code indented below:
+    if action == "on":
+        # Set the pin high:
+        wiringpi.digitalWrite(changePin, 1)
+        # Save the status message to be passed into the template:
+        message = "Turned " + deviceName + " on."
+    if action == "off":
+        wiringpi.digitalWrite(changePin, 0)
+        message = "Turned " + deviceName + " off."
 
-    button = ttk.Button(card_frame, text="Close", style="Red.TButton")
-    button.configure(command=lambda btn=button, pin=pin: button_click(btn, pin))
-    button.pack(pady=5)
+    # For each pin, read the pin state and store it in the pins dictionary:
+    for pin in pins:
+        pins[pin]['state'] = wiringpi.digitalRead(pin)
 
-root.mainloop()
+    # Along with the pin dictionary, put the message into the template data dictionary:
+    templateData = {
+        'pins': pins
+    }
+
+    return render_template('main.html', **templateData)
+
+
+if __name__ == "__main__":
+    app.run(host='0.0.0.0', port=8000, debug=True)

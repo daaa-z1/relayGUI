@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>GPIO Control</title>
+    <!-- Latest compiled and minified CSS -->
+    <link
+      rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+    />
+  </head>
+  <body>
+    <div class="container">
+      <h1>GPIO Control</h1>
+
+      <table class="table table-bordered">
+        <thead>
+          <tr>
+            <th>Pin Number</th>
+            <th>Name</th>
+            <th>Status</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for pin in pins %}
+          <tr>
+            <td>{{ pin[0] }}</td>
+            <td>{{ pin[1] }}</td>
+            <td>{{ "ON" if pin[2] == 1 else "OFF" }}</td>
+            <td>
+              <form
+                action="/toggle_pin/{{ pin[0] }}"
+                method="post"
+                style="display: inline"
+              >
+                <input
+                  type="hidden"
+                  name="state"
+                  value="{{ 0 if pin[2] == 1 else 1 }}"
+                />
+                <button
+                  type="submit"
+                  class="btn btn-sm btn-{{ 'success' if pin[2] == 1 else 'danger' }}"
+                >
+                  {{ 'Turn Off' if pin[2] == 1 else 'Turn On' }}
+                </button>
+              </form>
+              <form
+                action="/delete_pin/{{ pin[0] }}"
+                method="post"
+                style="display: inline"
+              >
+                <button type="submit" class="btn btn-sm btn-danger">
+                  Delete
+                </button>
+              </form>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+
+      <h2>Add Pin</h2>
+      <form action="/add_pin" method="post">
+        <div class="form-group">
+          <label for="pin_number">Pin Number:</label>
+          <input
+            type="number"
+            class="form-control"
+            id="pin_number"
+            name="pin_number"
+            required
+          />
+        </div>
+        <div class="form-group">
+          <label for="name">Name:</label>
+          <input
+            type="text"
+            class="form-control"
+            id="name"
+            name="name"
+            required
+          />
+        </div>
+        <button type="submit" class="btn btn-primary">Add</button>
+      </form>
+    </div>
+
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  </body>
+</html>
