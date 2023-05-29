@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request, redirect
 import wiringpi as wp
+# from wiringpi import GPIO
 import sqlite3
 
 app = Flask(__name__)
@@ -67,8 +68,8 @@ def delete_pin(pin_number):
 def setup_pins():
     pins = get_pins()
     for pin in pins:
-        wp.pinMode(pin[0], wp.OUTPUT)
-        wp.digitalWrite(pin[0], wp.LOW)
+        wp.pinMode(pin[0], 1)
+        wp.digitalWrite(pin[0], 0)
 
 
 @app.route('/')

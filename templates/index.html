@@ -82,7 +82,7 @@
               <h5 class="card-title">{{ pin[1] }}</h5>
               <p class="card-text">Pin {{ pin[0] }}</p>
               <p class="card-text text-muted">
-                Status: <strong>{{ "Open" if pin[2] == 1 else "Close" }}</strong>
+                Status: <strong>{{ "Open" if pin[2] == 0 else "Close" }}</strong>
               </p>
               <form action="/toggle_pin/{{ pin[0] }}" method="post">
                 <input
@@ -92,9 +92,9 @@
                 />
                 <button
                   type="submit"
-                  class="btn btn-sm btn-{{ 'success' if pin[2] == 1 else 'danger' }} mt-2"
+                  class="btn btn-sm btn-{{ 'success' if pin[2] == 0 else 'danger' }} mt-2"
                 >
-                  {{ 'Open' if pin[2] == 1 else 'Close' }}
+                  {{ 'Open' if pin[2] == 0 else 'Close' }}
                 </button>
               </form>
               <form action="/delete_pin/{{ pin[0] }}" method="post">
