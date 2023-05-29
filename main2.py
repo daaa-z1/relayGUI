@@ -2,7 +2,8 @@ import wiringpi
 import sqlite3
 from flask import Flask, render_template, request, redirect, url_for
 
-app = Flask(__name__)
+app = Flask(__name__, template_folder='templates')
+
 wiringpi.wiringPiSetup()
 
 # Database configuration
