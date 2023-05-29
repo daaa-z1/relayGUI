@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, redirect
 import wiringpi as wp
 import sqlite3
 
@@ -57,17 +57,20 @@ def setup_pins():
         wp.pinMode(pin[0], wp.OUTPUT)
         wp.digitalWrite(pin[0], wp.LOW)
 
+
 @app.route('/')
 def home():
     pins = get_pins()
     return render_template('index.html', pins=pins)
+
 
 @app.route('/toggle_pin/<int:pin_number>', methods=['POST'])
 def toggle_pin(pin_number):
     state = request.form['state']
     wp.digitalWrite(pin_number, int(state))
     update_pin_state(pin_number, int(state))
-    return 'success'
+    return redirect("/")
+
 
 @app.route('/add_pin', methods=['POST'])
 def add_pin_route():
@@ -75,12 +78,37 @@ def add_pin_route():
     name = request.form['name']
     add_pin(pin_number, name)
     setup_pins()  # Set up the newly added pin
-    return 'success'
+    return redirect("/")
+
 
 @app.route('/delete_pin/<int:pin_number>', methods=['POST'])
 def delete_pin_route(pin_number):
     delete_pin(pin_number)
-    return 'success'
+    return redirect("/")
+
+
+# Function to turn on a pin
+def turn_on_pin(pin_number):
+    wp.digitalWrite(pin_number, wp.HIGH)
+    update_pin_state(pin_number, 1)
+
+
+# Function to turn off a pin
+def turn_off_pin(pin_number):
+    wp.digitalWrite(pin_number, wp.LOW)
+    update_pin_state(pin_number, 0)
+
+
+@app.route('/turn_on_pin/<int:pin_number>', methods=['POST'])
+def turn_on_pin_route(pin_number):
+    turn_on_pin(pin_number)
+    return redirect("/")
+
+
+@app.route('/turn_off_pin/<int:pin_number>', methods=['POST'])
+def turn_off_pin_route(pin_number):
+    turn_off_pin(pin_number)
+    return redirect("/")
 
 if __name__ == '__main__':
     create_table()
