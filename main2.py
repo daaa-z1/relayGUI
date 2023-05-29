@@ -1,107 +1,70 @@
-from flask import Flask, render_template, request, redirect
-import wiringpi as wp
-# from wiringpi import GPIO
+import wiringpi
 import sqlite3
+from flask import Flask, render_template, request, redirect, url_for
 
 app = Flask(__name__)
-db_path = 'pins.db'  # Path to the SQLite database file
+wiringpi.wiringPiSetup()
 
-# Set up WiringOPi
-wp.wiringPiSetup()
+# Database configuration
+DB_PATH = "pins.db"
 
-# Create the pins table if it doesn't exist
-
-
-def create_table():
-    conn = sqlite3.connect(db_path)
-    c = conn.cursor()
-    c.execute('''CREATE TABLE IF NOT EXISTS pins
-                 (pin_number INTEGER PRIMARY KEY, name TEXT, state INTEGER)''')
-    conn.commit()
-    conn.close()
-
-# Get all pins from the database
+# Create a dictionary to store the pin information
+pins = {}
 
 
-def get_pins():
-    conn = sqlite3.connect(db_path)
-    c = conn.cursor()
-    c.execute('SELECT * FROM pins')
-    pins = c.fetchall()
-    conn.close()
-    return pins
+@app.route("/")
+def index():
+    # Retrieve pin information from the database
+    with sqlite3.connect(DB_PATH) as conn:
+        cursor = conn.cursor()
+        cursor.execute("SELECT * FROM pins")
+        rows = cursor.fetchall()
 
-# Update the state of a pin in the database
+    # Populate the pins dictionary
+    pins.clear()
+    for row in rows:
+        pin_number, pin_name, pin_state = row
+        pins[pin_number] = {"name": pin_name, "state": pin_state}
 
-
-def update_pin_state(pin_number, state):
-    conn = sqlite3.connect(db_path)
-    c = conn.cursor()
-    c.execute('UPDATE pins SET state=? WHERE pin_number=?', (state, pin_number))
-    conn.commit()
-    conn.close()
-
-# Add a new pin to the database
+    return render_template("index.html", pins=pins)
 
 
-def add_pin(pin_number, name):
-    conn = sqlite3.connect(db_path)
-    c = conn.cursor()
-    c.execute(
-        'INSERT INTO pins (pin_number, name, state) VALUES (?, ?, 1)', (pin_number, name))
-    conn.commit()
-    conn.close()
-
-# Delete a pin from the database
-
-
-def delete_pin(pin_number):
-    conn = sqlite3.connect(db_path)
-    c = conn.cursor()
-    c.execute('DELETE FROM pins WHERE pin_number=?', (pin_number,))
-    conn.commit()
-    conn.close()
-
-# Set each pin as an output and initialize it to low
-
-
-def setup_pins():
-    pins = get_pins()
-    for pin in pins:
-        wp.pinMode(pin[0], 1)
-        wp.digitalWrite(pin[0], 0)
-
-
-@app.route('/')
-def home():
-    pins = get_pins()
-    return render_template('index.html', pins=pins)
-
-
-@app.route('/toggle_pin/<int:pin_number>', methods=['POST'])
+@app.route("/toggle_pin/<int:pin_number>", methods=["POST"])
 def toggle_pin(pin_number):
-    state = request.form['state']
-    wp.digitalWrite(pin_number, int(state))
-    update_pin_state(pin_number, int(state))
-    return redirect('/')
+    # Get the current state of the pin
+    pin_state = pins[pin_number]["state"]
+
+    # Toggle the pin state
+    new_state = 0 if pin_state == 1 else 1
+    wiringpi.digitalWrite(pin_number, new_state)
+
+    # Update the pin state in the database
+    with sqlite3.connect(DB_PATH) as conn:
+        cursor = conn.cursor()
+        cursor.execute("UPDATE pins SET state = ? WHERE number = ?", (new_state, pin_number))
+        conn.commit()
+
+    return redirect(url_for("index"))
 
 
-@app.route('/add_pin', methods=['POST'])
-def add_pin_route():
-    pin_number = int(request.form['pin_number'])
-    name = request.form['name']
-    add_pin(pin_number, name)
-    setup_pins()  # Set up the newly added pin
-    return redirect('/')
+@app.route("/delete_pin/<int:pin_number>", methods=["POST"])
+def delete_pin(pin_number):
+    # Delete the pin from the pins dictionary
+    del pins[pin_number]
+
+    # Delete the pin from the database
+    with sqlite3.connect(DB_PATH) as conn:
+        cursor = conn.cursor()
+        cursor.execute("DELETE FROM pins WHERE number = ?", (pin_number,))
+        conn.commit()
+
+    return redirect(url_for("index"))
 
 
-@app.route('/delete_pin/<int:pin_number>', methods=['POST'])
-def delete_pin_route(pin_number):
-    delete_pin(pin_number)
-    return redirect('/')
+if __name__ == "__main__":
+    # Set each pin as an output and make it low
+    for pin_number in pins:
+        wiringpi.pinMode(pin_number, 1)
+        wiringpi.digitalWrite(pin_number, 0)
 
-
-if __name__ == '__main__':
-    create_table()
-    setup_pins()
-    app.run(host='0.0.0.0', port=8000, debug=True)
+    app.run(host="0.0.0.0", port=8000, debug=True)
