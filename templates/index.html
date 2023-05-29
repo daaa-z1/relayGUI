@@ -79,8 +79,8 @@
         <div class="col-md-4">
           <div class="card mt-4 shadow">
             <div class="card-body">
-              <h5 class="card-title">Pin {{ pin[0] }}</h5>
-              <p class="card-text">{{ pin[1] }}</p>
+              <h5 class="card-title">{{ pin[1] }}</h5>
+              <p class="card-text">Pin {{ pin[0] }}</p>
               <p class="card-text text-muted">
                 Status: <strong>{{ "ON" if pin[2] == 1 else "OFF" }}</strong>
               </p>
@@ -92,13 +92,13 @@
                 />
                 <button
                   type="submit"
-                  class="btn btn-sm btn-{{ 'success' if pin[2] == 1 else 'danger' }}"
+                  class="btn btn-sm btn-{{ 'success' if pin[2] == 1 else 'danger' }} mt-2"
                 >
                   {{ 'Turn Off' if pin[2] == 1 else 'Turn On' }}
                 </button>
               </form>
               <form action="/delete_pin/{{ pin[0] }}" method="post">
-                <button type="submit" class="btn btn-sm btn-danger">
+                <button type="submit" class="btn btn-sm btn-danger mt-2">
                   Delete
                 </button>
               </form>
