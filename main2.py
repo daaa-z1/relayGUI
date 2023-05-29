@@ -38,7 +38,7 @@ def update_pin_state(pin_number, state):
 def add_pin(pin_number, name):
     conn = sqlite3.connect(db_path)
     c = conn.cursor()
-    c.execute('INSERT INTO pins (pin_number, name, state) VALUES (?, ?, 0)', (pin_number, name))
+    c.execute('INSERT INTO pins (pin_number, name, state) VALUES (?, ?, 1)', (pin_number, name))
     conn.commit()
     conn.close()
 
@@ -54,8 +54,8 @@ def delete_pin(pin_number):
 def setup_pins():
     pins = get_pins()
     for pin in pins:
-        wp.pinMode(pin[0], wp.OUTPUT)
-        wp.digitalWrite(pin[0], wp.LOW)
+        wp.pinMode(pin[0], 1)
+        wp.digitalWrite(pin[0], 1)
 
 
 @app.route('/')
@@ -90,13 +90,13 @@ def delete_pin_route(pin_number):
 # Function to turn on a pin
 def turn_on_pin(pin_number):
     wp.digitalWrite(pin_number, wp.HIGH)
-    update_pin_state(pin_number, 1)
+    update_pin_state(pin_number, 0)
 
 
 # Function to turn off a pin
 def turn_off_pin(pin_number):
     wp.digitalWrite(pin_number, wp.LOW)
-    update_pin_state(pin_number, 0)
+    update_pin_state(pin_number, 1)
 
 
 @app.route('/turn_on_pin/<int:pin_number>', methods=['POST'])
