@@ -1,127 +1,77 @@
 <!DOCTYPE html>
 <html>
-  <head>
+<head>
     <title>GPIO Control</title>
     <!-- Latest compiled and minified CSS -->
-    <link
-      rel="stylesheet"
-      href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
-    />
-  </head>
-  <body>
-    <div class="container">
-      <h1 class="text-center">GPIO Control</h1>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+</head>
+<body>
 
-      <div class="row">
-        <!-- ... -->
+<div class="container">
+    <h1 class="text-center">GPIO Control</h1>
 
-        {% for pin_number, pin_info in pins.items() %}
+    <div class="row">
+        {% for pin_number, pin_info in pins %}
         <div class="col-md-4">
-          <div class="panel panel-default">
-            <div class="panel-heading">
-              <h3 class="panel-title">
-                Pin {{ pin_number }}: {{ pin_info.name }}
-              </h3>
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Pin {{ pin_number }}: {{ pin_info[1] }}</h3>
+                </div>
+                <div class="panel-body">
+                    <p>Status: {% if pin_info[2] == 1 %}On{% else %}Off{% endif %}</p>
+                </div>
+                <div class="panel-footer">
+                    <form action="/toggle_pin/{{ pin_number }}" method="POST">
+                        <input type="hidden" name="state" value="{% if pin_info[2] == 1 %}0{% else %}1{% endif %}">
+                        <button type="submit" class="btn btn-primary">
+                            {% if pin_info[2] == 1 %}Turn Off{% else %}Turn On{% endif %}
+                        </button>
+                    </form>
+                    <form action="/delete_pin/{{ pin_number }}" method="POST">
+                        <button type="submit" class="btn btn-danger">Delete</button>
+                    </form>
+                </div>
             </div>
-            <div class="panel-body">
-              <p>
-                Status: {% if pin_info.state == 1 %}On{% else %}Off{% endif %}
-              </p>
-            </div>
-            <div class="panel-footer">
-              <form
-                action="{{ url_for('toggle_pin', pin_number=pin_number) }}"
-                method="POST"
-              >
-                <button type="submit" class="btn btn-primary">
-                  {% if pin_info.state == 1 %}Turn Off{% else %}Turn On{% endif
-                  %}
-                </button>
-              </form>
-              <form
-                action="{{ url_for('delete_pin', pin_number=pin_number) }}"
-                method="POST"
-              >
-                <button type="submit" class="btn btn-danger">Delete</button>
-              </form>
-              <form
-                action="{{ url_for('turn_on_pin', pin_number=pin_number) }}"
-                method="POST"
-                style="display: inline"
-              >
-                <button type="submit" class="btn btn-success">Turn On</button>
-              </form>
-              <form
-                action="{{ url_for('turn_off_pin', pin_number=pin_number) }}"
-                method="POST"
-                style="display: inline"
-              >
-                <button type="submit" class="btn btn-warning">Turn Off</button>
-              </form>
-            </div>
-          </div>
         </div>
         {% endfor %}
-
-        <!-- ... -->
-      </div>
-
-      <div class="row">
-        <div class="col-md-4">
-          <button
-            type="button"
-            class="btn btn-primary btn-lg"
-            data-toggle="modal"
-            data-target="#addPinModal"
-          >
-            Add Pin
-          </button>
-        </div>
-      </div>
     </div>
 
-    <!-- Add Pin Modal -->
-    <div
-      class="modal fade"
-      id="addPinModal"
-      tabindex="-1"
-      role="dialog"
-      aria-labelledby="addPinModalLabel"
-    >
-      <div class="modal-dialog" role="document">
-        <div class="modal-content">
+    <div class="row">
+        <div class="col-md-4">
+            <button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#addPinModal">Add Pin</button>
+        </div>
+    </div>
+</div>
+
+<!-- Add Pin Modal -->
+<div class="modal fade" id="addPinModal" tabindex="-1" role="dialog" aria-labelledby="addPinModalLabel">
+  <div class="modal-dialog" role="document">
+      <div class="modal-content">
           <div class="modal-header">
-            <h4 class="modal-title" id="addPinModalLabel">Add Pin</h4>
+              <h4 class="modal-title" id="addPinModalLabel">Add Pin</h4>
           </div>
           <div class="modal-body">
-            <form action="{{ url_for('add_pin') }}" method="POST">
-              <div class="form-group">
-                <label for="pinNumber">Pin Number:</label>
-                <input
-                  type="text"
-                  class="form-control"
-                  id="pinNumber"
-                  name="pin_number"
-                />
-              </div>
-              <div class="form-group">
-                <label for="pinName">Pin Name:</label>
-                <input
-                  type="text"
-                  class="form-control"
-                  id="pinName"
-                  name="pin_name"
-                />
-              </div>
-              <button type="submit" class="btn btn-primary">Add</button>
-            </form>
+              <form action="/add_pin" method="POST">
+                  <div class="form-group">
+                      <label for="pinNumber">Pin Number:</label>
+                      <input type="text" class="form-control" id="pinNumber" name="pin_number">
+                  </div>
+                  <div class="form-group">
+                      <label for="pinName">Pin Name:</label>
+                      <input type="text" class="form-control" id="pinName" name="name">
+                  </div>
+                  <button type="submit" class="btn btn-primary">Add</button>
+              </form>
           </div>
-        </div>
       </div>
-    </div>
+  </div>
+</div>
 
-    <!-- Latest compiled and minified JavaScript -->
-    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-  </body>
+
+<!-- Latest compiled and minified JavaScript -->
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+</body>
 </html>
+
