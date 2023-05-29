@@ -61,12 +61,15 @@ def delete_pin(pin_number):
 
     return redirect(url_for("index"))
 
+
+@app.route("/add_pin", methods=["POST"])
 def add_pin():
     if request.method == "POST":
         pin_number = request.form.get("pin_number")
         pin_name = request.form.get("pin_name")
         # logika untuk menambahkan pin ke database atau dictionary
         return redirect(url_for("index"))
+
 
 if __name__ == "__main__":
     # Set each pin as an output and make it low
