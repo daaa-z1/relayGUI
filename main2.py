@@ -42,7 +42,8 @@ def toggle_pin(pin_number):
     # Update the pin state in the database
     with sqlite3.connect(DB_PATH) as conn:
         cursor = conn.cursor()
-        cursor.execute("UPDATE pins SET state = ? WHERE number = ?", (new_state, pin_number))
+        cursor.execute("UPDATE pins SET state = ? WHERE number = ?",
+                       (new_state, pin_number))
         conn.commit()
 
     return redirect(url_for("index"))
@@ -68,7 +69,15 @@ def add_pin():
         pin_number = request.form.get("pin_number")
         pin_name = request.form.get("pin_name")
         # logika untuk menambahkan pin ke database atau dictionary
-        return redirect(url_for("index"))
+        with sqlite3.connect(DB_PATH) as conn:
+            cursor = conn.cursor()
+            cursor.execute("INSERT INTO pins (number, name, state) VALUES (?, ?, ?)",
+                           (pin_number, pin_name, 0))  # Assuming initial state is 0
+            conn.commit()
+
+        # Update the pins dictionary
+        pins[pin_number] = {"name": pin_name, "state": 0}
+    return redirect(url_for("index"))
 
 
 if __name__ == "__main__":
