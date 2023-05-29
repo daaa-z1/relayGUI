@@ -48,7 +48,7 @@ def add_pin(pin_number, name):
     conn = sqlite3.connect(db_path)
     c = conn.cursor()
     c.execute(
-        'INSERT INTO pins (pin_number, name, state) VALUES (?, ?, 0)', (pin_number, name))
+        'INSERT INTO pins (pin_number, name, state) VALUES (?, ?, 1)', (pin_number, name))
     conn.commit()
     conn.close()
 
