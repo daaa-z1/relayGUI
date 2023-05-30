@@ -1,25 +1,171 @@
 <!DOCTYPE html>
-<head>
-   <title>RPi Web Server</title>
-   <!-- Latest compiled and minified CSS -->
-   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
-   <!-- Optional theme -->
-   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
-   <!-- Latest compiled and minified JavaScript -->
-   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
-</head>
+<html>
+  <head>
+    <title>GPIO Control</title>
+    <!-- Latest compiled and minified CSS -->
+    <link
+      rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+    />
+  </head>
+  <body>
+    <div class="container">
+      <h1 class="text-center">GPIO Control</h1>
+      <div class="row">
+        {% for pin in pins %}
+        <div class="col-md-4">
+          <div class="panel panel-default">
+            <div class="panel-heading">
+              <h3 class="panel-title">{{ pin[2] }}</h3>
+            </div>
+            <div class="panel-body" id="panel-body-{{ pin[0] }}">
+              <p>
+                Status: {% if pin[2] == 1 %}Door is Closed{% else %}Door is
+                Open{% endif %}
+              </p>
+            </div>
+            <div class="panel-footer">
+              {% if pin[0] % 2 == 0 %}
+              <!-- Control even pin -->
+              <form
+                action="/toggle_pin/{{ pin[1] }}"
+                method="POST"
+                data-message="Door is Opening"
+                onsubmit="updatePanelBody(event)"
+              >
+                <input type="hidden" name="state" value="1" />
+                <button type="submit" class="btn btn-primary">Open</button>
+              </form>
+              <form
+                action="/toggle_pin/{{ pin[1] }}"
+                method="POST"
+                data-message="Stop Opening Door"
+                onsubmit="updatePanelBody(event)"
+              >
+                <input type="hidden" name="state" value="0" />
+                <button type="submit" class="btn btn-danger">Stop Open</button>
+              </form>
+              {% else %}
+              <!-- Control odd pin -->
+              <form
+                action="/toggle_pin/{{ pin[0] }}"
+                method="POST"
+                data-message="Door is Closing"
+                onsubmit="updatePanelBody(event)"
+              >
+                <input type="hidden" name="state" value="1" />
+                <button type="submit" class="btn btn-primary">Close</button>
+              </form>
+              <form
+                action="/toggle_pin/{{ pin[0] }}"
+                method="POST"
+                data-message="Stop Closing Door"
+                onsubmit="updatePanelBody(event)"
+              >
+                <input type="hidden" name="state" value="0" />
+                <button type="submit" class="btn btn-danger">
+                  Stop Close
+                </button>
+              </form>
+              {% endif %}
+              <form
+                action="/delete_pin/{{ pin[0] }}/{{ pin[1] }}"
+                method="POST"
+              >
+                <button type="submit" class="btn btn-danger">Delete</button>
+              </form>
+              <form
+                action="/toggle_pin/{{ pin[0] }}"
+                method="POST"
+                data-message="Stopping Door Operation"
+                onsubmit="updatePanelBody(event)"
+              >
+                <input type="hidden" name="state" value="2" />
+                <button type="submit" class="btn btn-warning">Stop</button>
+              </form>
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+      <div class="row">
+        <div class="col-md-4">
+          <button
+            type="button"
+            class="btn btn-primary btn-lg"
+            data-toggle="modal"
+            data-target="#addPinModal"
+          >
+            Add Pin
+          </button>
+        </div>
+      </div>
+    </div>
 
-<body>
-   <h1>RPi Web Server</h1>
-   {% for pin in pins %}
-   <h2>{{ pins[pin].name }}
-   {% if pins[pin].state == true %}
-      is currently <strong>on</strong></h2><div class="row"><div class="col-md-2">
-      <a href="/{{pin}}/off" class="btn btn-block btn-lg btn-default" role="button">Turn off</a></div></div>
-   {% else %}
-      is currently <strong>off</strong></h2><div class="row"><div class="col-md-2">
-      <a href="/{{pin}}/on" class="btn btn-block btn-lg btn-primary" role="button">Turn on</a></div></div>
-   {% endif %}
-   {% endfor %}
-</body>
+    <!-- Add Pin Modal -->
+    <div
+      class="modal fade"
+      id="addPinModal"
+      tabindex="-1"
+      role="dialog"
+      aria-labelledby="addPinModalLabel"
+    >
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h4 class="modal-title" id="addPinModalLabel">Add Pin</h4>
+          </div>
+          <div class="modal-body">
+            <form action="/add_pin" method="POST">
+              <div class="form-group">
+                <label for="evenPin">Open Pin Number:</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="evenPin"
+                  placeholder="Even Number"
+                  name="open_pin"
+                />
+              </div>
+              <div class="form-group">
+                <label for="oddPin">Close Pin Number:</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="oddPin"
+                  placeholder="Odd Number"
+                  name="close_pin"
+                />
+              </div>
+              <div class="form-group">
+                <label for="pinName">Pin Name:</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="pinName"
+                  name="name"
+                />
+              </div>
+              <button type="submit" class="btn btn-primary">Add</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+    <script>
+      function updatePanelBody(event) {
+        event.preventDefault();
+        const form = event.target;
+        const message = form.getAttribute("data-message");
+        const panelBodyId = form.getAttribute("action").split("/").pop();
+        const panelBody = document.getElementById("panel-body-" + panelBodyId);
+        panelBody.innerHTML = "<p>Status: " + message + "</p>";
+      }
+    </script>
+  </body>
 </html>
