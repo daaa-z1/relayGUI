@@ -1,155 +1,99 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title>GPIO Control</title>
-    <!-- Latest compiled and minified CSS -->
-    <link
-      rel="stylesheet"
-      href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
-    />
+<head>
+    <title>GPIO Controller</title>
     <style>
-      .btn-space {
-        margin-bottom: 10px;
-      }
-    </style>
-  </head>
-  <body>
-    <div class="container">
-      <h1 class="text-center">GPIO Control</h1>
-      <div class="row">
-        {% for pin in pins %}
-        <div class="col-md-4">
-          <div class="panel panel-default">
-            <div class="panel-heading">
-              <h3 class="panel-title text-center">{{ pin[2] }}</h3>
-            </div>
-            <div class="panel-body" id="panel-body-{{ pin[0] }}">
-              <p>
-                Status: {% if pin[3] == 1 %}Door is Closed{% else %}Door is
-                Open{% endif %}
-              </p>
-            </div>
-            <div class="panel-footer">
-              {% if pin[0] % 2 == 1 %}
-              <!-- Control odd pin -->
-              <form
-                action="/toggle_pin/{{ pin[0] }}"
-                method="POST"
-                data-message="Opening {{ pin[2] }}"
-                onsubmit="updatePanelBody(event)"
-                class="btn-space"
-              >
-                <input type="hidden" name="state" value="1" />
-                <button type="submit" class="btn btn-primary">Open</button>
-              </form>
-              <form
-                action="/toggle_pin/{{ pin[0] }}"
-                method="POST"
-                data-message="Stopping Opening {{ pin[2] }}"
-                onsubmit="updatePanelBody(event)"
-                class="btn-space"
-              >
-                <input type="hidden" name="state" value="0" />
-                <button type="submit" class="btn btn-danger">Stop Open</button>
-              </form>
-              {% else %}
-              <!-- Control even pin -->
-              <form
-                action="/toggle_pin/{{ pin[0] }}"
-                method="POST"
-                data-message="Closing {{ pin[2] }}"
-                onsubmit="updatePanelBody(event)"
-                class="btn-space"
-              >
-                <input type="hidden" name="state" value="1" />
-                <button type="submit" class="btn btn-primary">Close</button>
-              </form>
-              <form
-                action="/toggle_pin/{{ pin[0] }}"
-                method="POST"
-                data-message="Stopping Closing {{ pin[2] }}"
-                onsubmit="updatePanelBody(event)"
-                class="btn-space"
-              >
-                <input type="hidden" name="state" value="0" />
-                <button type="submit" class="btn btn-danger">Stop Close</button>
-              </form>
-              {% endif %}
-              <form
-                action="/delete_pin/{{ pin[0] }}/{{ pin[1] }}"
-                method="POST"
-              >
-                <button
-                  type="submit"
-                  class="btn btn-warning btn-block"
-                  onclick="return confirm('Are you sure you want to delete this pin?');"
-                >
-                  Delete
-                </button>
-              </form>
-            </div>
-          </div>
-        </div>
-        {% endfor %}
-      </div>
-      <div class="row">
-        <div class="col-md-4 col-md-offset-4">
-          <div class="panel panel-default">
-            <div class="panel-heading">
-              <h3 class="panel-title text-center">Add New Pin</h3>
-            </div>
-            <div class="panel-body">
-              <form action="/add_pin" method="POST">
-                <div class="form-group">
-                  <label for="odd_pin">Odd Pin Number:</label>
-                  <input
-                    type="number"
-                    class="form-control"
-                    id="odd_pin"
-                    name="odd_pin"
-                    required
-                  />
-                </div>
-                <div class="form-group">
-                  <label for="even_pin">Even Pin Number:</label>
-                  <input
-                    type="number"
-                    class="form-control"
-                    id="even_pin"
-                    name="even_pin"
-                    required
-                  />
-                </div>
-                <div class="form-group">
-                  <label for="name">Name:</label>
-                  <input
-                    type="text"
-                    class="form-control"
-                    id="name"
-                    name="name"
-                    required
-                  />
-                </div>
-                <button type="submit" class="btn btn-success btn-block">
-                  Add Pin
-                </button>
-              </form>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
 
-    <script>
-      // Update the panel body with a message when submitting a form
-      function updatePanelBody(event) {
-        event.preventDefault();
-        var message = event.target.getAttribute("data-message");
-        var panelBodyId = event.target.parentNode.previousElementSibling.id;
-        var panelBody = document.getElementById(panelBodyId);
-        panelBody.innerHTML = "<p>" + message + "</p>";
-        event.target.submit();
-      }
-    </script>
-  </body>
+        th, td {
+            padding: 8px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        .button-container {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+
+        .button-container button {
+            padding: 10px 20px;
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+    <h1>GPIO Controller</h1>
+
+    <h2>Pins</h2>
+
+    <table>
+        <tr>
+            <th>Name</th>
+            <th>Odd Pin</th>
+            <th>Even Pin</th>
+            <th>State</th>
+            <th>Control</th>
+            <th>Delete</th>
+        </tr>
+        {% for pin in pins %}
+            <tr>
+                <td>{{ pin[2] }}</td>
+                <td>{{ pin[0] }}</td>
+                <td>{{ pin[1] }}</td>
+                <td>
+                    {% if pin[3] == 1 %}
+                        Off
+                    {% elif pin[3] == 0 %}
+                        On
+                    {% endif %}
+                </td>
+                <td>
+                    <form action="/toggle_pin/{{ pin[0] }}/{{ pin[1] }}" method="POST">
+                        {% if pin[0] is not none %}
+                            <button type="submit" name="state" value="1">Turn On</button>
+                            <button type="submit" name="state" value="0">Turn Off</button>
+                        {% else %}
+                            <button type="submit" name="state" value="1">Turn On</button>
+                        {% endif %}
+                    </form>
+                </td>
+                <td>
+                    <form action="/delete_pin/{{ pin[0] }}/{{ pin[1] }}" method="POST">
+                        <button type="submit">Delete</button>
+                    </form>
+                </td>
+            </tr>
+        {% endfor %}
+    </table>
+
+    <h2>Add Pin</h2>
+
+    <form action="/add_pin" method="POST">
+        <label for="odd_pin">Odd Pin:</label>
+        <input type="number" id="odd_pin" name="odd_pin" required><br><br>
+
+        <label for="even_pin">Even Pin:</label>
+        <input type="number" id="even_pin" name="even_pin" required><br><br>
+
+        <label for="name">Name:</label>
+        <input type="text" id="name" name="name" required><br><br>
+
+        <button type="submit">Add</button>
+    </form>
+
+    <h2>Stop All Pins</h2>
+
+    <form action="/stop_pin/0/0" method="POST">
+        <button type="submit">Stop All Pins</button>
+    </form>
+</body>
 </html>
