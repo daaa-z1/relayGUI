@@ -85,17 +85,15 @@ def home():
     pins = get_pins()
     return render_template('main.html', pins=pins)
 
-@app.route('/toggle_pin/<int:pin_number>', methods=['POST'])
+@app.route('/toggle_pin/<int:pin_number>/<int:odd_number>', methods=['POST'])
 def toggle_pin(pin_number):
     state = int(request.form['state'])
     if state == 2:
         # Handle stop action
-        if pin_number % 2 == 0:
-            # Stop even pin operation
-            turn_off_even_pin(pin_number)
-        else:
-            # Stop odd pin operation
-            turn_off_odd_pin(pin_number)
+        # Stop even pin operation
+        turn_off_even_pin(pin_number)
+        # Stop odd pin operation
+         turn_off_odd_pin(pin_number)
     else:
         # Handle open/close actions
         if pin_number % 2 == 0:
