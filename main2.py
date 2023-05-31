@@ -35,10 +35,11 @@ def update_pin_state(pin_number, state):
     conn.close()
 
 # Add a new pin to the database
-def add_pin(pin_number, name):
+def add_pin(even_pin, odd_pin, name):
     conn = sqlite3.connect(db_path)
     c = conn.cursor()
-    c.execute('INSERT INTO pins (pin_number, name, state) VALUES (?, ?, 1)', (pin_number, name))
+    c.execute('INSERT INTO pins (pin_number, name, state) VALUES (?, ?, 1)', (even_pin, name))
+    c.execute('INSERT INTO pins (pin_number, name, state) VALUES (?, ?, 1)', (odd_pin, name))
     conn.commit()
     conn.close()
 
@@ -74,9 +75,10 @@ def toggle_pin(pin_number):
 
 @app.route('/add_pin', methods=['POST'])
 def add_pin_route():
-    pin_number = int(request.form['pin_number'])
+    even_pin = int(request.form['even_pin'])
+    odd_pin = int(request.form['odd_pin'])
     name = request.form['name']
-    add_pin(pin_number, name)
+    add_pin(even_pin, odd_pin, name)
     setup_pins()  # Set up the newly added pin
     return redirect("/")
 
