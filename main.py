@@ -85,7 +85,7 @@ def turn_off_even_pin(even_pin):
 @app.route('/')
 def home():
     pins = get_pins()
-    return render_template('index.html', pins=pins)
+    return render_template('main.html', pins=pins)
 
 @app.route('/toggle_pin/<int:pin_number>', methods=['POST'])
 def toggle_pin(pin_number):
