@@ -54,10 +54,10 @@ def delete_pin(odd_pin, even_pin):
 def setup_pins():
     pins = get_pins()
     for pin in pins:
-        if pin[0] = 1:
+        if pin[0] == 1:
             wp.pinMode(pin[0], 1)
             wp.digitalWrite(pin[0], 1)
-        if pin[1] = 1:
+        if pin[1] == 1:
             wp.pinMode(pin[1], 1)
             wp.digitalWrite(pin[1], 1)
 
