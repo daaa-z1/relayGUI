@@ -78,7 +78,7 @@
               </form>
               {% endif %}
               <form
-                action="/toggle_pin/{{ pin[0] }}//{{pin[1]}}"
+                action="/stop_pin/{{ pin[0] }}//{{pin[1]}}"
                 method="POST"
                 data-message="Pembatalan Pengoperasian {{pin[2]}}"
                 onsubmit="updatePanelBody(event)"
