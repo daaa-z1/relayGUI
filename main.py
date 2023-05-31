@@ -88,28 +88,33 @@ def home():
 @app.route('/toggle_pin/<int:pin_number>/<int:even_number>', methods=['POST'])
 def toggle_pin(pin_number):
     state = int(request.form['state'])
-    if state == 2:
-        # Handle stop action
-        # Stop even pin operation
-        turn_off_even_pin(even_number)
-        # Stop odd pin operation
-         turn_off_odd_pin(pin_number)
+#     if state == 2:
+#         # Handle stop action
+#         # Stop even pin operation
+#         turn_off_even_pin(even_number)
+#         # Stop odd pin operation
+#          turn_off_odd_pin(pin_number)
+#     else:
+#         # Handle open/close actions
+    if pin_number % 2 == 0:
+        # Control even pin
+        if state == 1:
+            turn_on_even_pin(pin_number)
+        elif state == 0:
+             turn_off_even_pin(pin_number)
     else:
-        # Handle open/close actions
-        if pin_number % 2 == 0:
-            # Control even pin
-            if state == 1:
-                turn_on_even_pin(pin_number)
-            elif state == 0:
-                turn_off_even_pin(pin_number)
-        else:
             # Control odd pin
-            if state == 1:
-                turn_on_odd_pin(pin_number)
-            elif state == 0:
-                turn_off_odd_pin(pin_number)
+        if state == 1:
+            turn_on_odd_pin(pin_number)
+         elif state == 0:
+            turn_off_odd_pin(pin_number)
     return redirect("/")
 
+# Route for stop button
+@app.route('/stop_pin/<int:odd_pin>/<int:even_pin>', methods=['POST'])
+def stop_pin_route(odd_pin, even_pin):
+    turn_off_odd_pin(odd_pin)
+    turn_off_even_pin(even_pin)
 
 # Route for adding a pin
 @app.route('/add_pin', methods=['POST'])
