@@ -101,12 +101,12 @@ def toggle_pin(pin_number):
         if state == 1:
             turn_on_even_pin(pin_number)
         elif state == 0:
-             turn_off_even_pin(pin_number)
+            turn_off_even_pin(pin_number)
     else:
             # Control odd pin
         if state == 1:
             turn_on_odd_pin(pin_number)
-         elif state == 0:
+        elif state == 0:
             turn_off_odd_pin(pin_number)
     return redirect("/")
 
