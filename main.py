@@ -54,29 +54,29 @@ def delete_pin(odd_pin, even_pin):
 def setup_pins():
     pins = get_pins()
     for pin in pins:
-        wp.pinMode(pin[0], 1)
-        wp.digitalWrite(pin[0], 1)
-        wp.pinMode(pin[1], 1)
-        wp.digitalWrite(pin[1], 1)
+        wp.pinMode(pin[0], wp.OUTPUT)
+        wp.digitalWrite(pin[0], wp.HIGH)
+        wp.pinMode(pin[1], wp.OUTPUT)
+        wp.digitalWrite(pin[1], wp.HIGH)
 
 # Function to turn on an odd pin
 def turn_on_odd_pin(odd_pin):
-    wp.digitalWrite(odd_pin, 0)
+    wp.digitalWrite(odd_pin, wp.LOW)
     update_pin_state(odd_pin, None, 0)
 
 # Function to turn off an odd pin
 def turn_off_odd_pin(odd_pin):
-    wp.digitalWrite(odd_pin, 1)
+    wp.digitalWrite(odd_pin, wp.HIGH)
     update_pin_state(odd_pin, None, 1)
 
 # Function to turn on an even pin
 def turn_on_even_pin(even_pin):
-    wp.digitalWrite(even_pin, 0)
+    wp.digitalWrite(even_pin, wp.LOW)
     update_pin_state(None, even_pin, 0)
 
 # Function to turn off an even pin
 def turn_off_even_pin(even_pin):
-    wp.digitalWrite(even_pin, 1)
+    wp.digitalWrite(even_pin, wp.HIGH)
     update_pin_state(None, even_pin, 1)
 
 # Route for the home page
@@ -85,17 +85,9 @@ def home():
     pins = get_pins()
     return render_template('main.html', pins=pins)
 
-@app.route('/toggle_pin/<int:pin_number>/<int:even_number>', methods=['POST'])
+@app.route('/toggle_pin/<int:pin_number>', methods=['POST'])
 def toggle_pin(pin_number):
     state = int(request.form['state'])
-#     if state == 2:
-#         # Handle stop action
-#         # Stop even pin operation
-#         turn_off_even_pin(even_number)
-#         # Stop odd pin operation
-#          turn_off_odd_pin(pin_number)
-#     else:
-#         # Handle open/close actions
     if pin_number % 2 == 0:
         # Control even pin
         if state == 1:
@@ -103,7 +95,7 @@ def toggle_pin(pin_number):
         elif state == 0:
             turn_off_even_pin(pin_number)
     else:
-            # Control odd pin
+        # Control odd pin
         if state == 1:
             turn_on_odd_pin(pin_number)
         elif state == 0:
@@ -115,6 +107,7 @@ def toggle_pin(pin_number):
 def stop_pin_route(odd_pin, even_pin):
     turn_off_odd_pin(odd_pin)
     turn_off_even_pin(even_pin)
+    return redirect("/")
 
 # Route for adding a pin
 @app.route('/add_pin', methods=['POST'])
