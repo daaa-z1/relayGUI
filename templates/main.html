@@ -33,7 +33,7 @@
               {% if pin[0] % 2 == 1 %}
               <!-- Control even pin -->
               <form
-                action="/toggle_pin/{{ pin[1] }}"
+                action="/toggle_pin/{{ pin[1] }}/{{pin[3]}}"
                 method="POST"
                 data-message="Membuka {{pin[2]}}"
                 onsubmit="updatePanelBody(event)"
@@ -43,7 +43,7 @@
                 <button type="submit" class="btn btn-primary">Open</button>
               </form>
               <form
-                action="/toggle_pin/{{ pin[1] }}"
+                action="/toggle_pin/{{ pin[1] }}/{{pin[3]}}"
                 method="POST"
                 data-message="Berhenti Membuka {{pin[2]}}"
                 onsubmit="updatePanelBody(event)"
@@ -55,7 +55,7 @@
               {% else %}
               <!-- Control odd pin -->
               <form
-                action="/toggle_pin/{{ pin[0] }}"
+                action="/toggle_pin/{{ pin[0] }}/{{pin[3]}}"
                 method="POST"
                 data-message="Menutup {{pin[2]}}"
                 onsubmit="updatePanelBody(event)"
