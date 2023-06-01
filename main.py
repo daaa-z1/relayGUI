@@ -101,13 +101,11 @@ def toggle_open_pin(pin_number):
     state = int(request.form['state'])
     pins = get_pins()
     for pin in pins:
-        if pin[1] == pin_number:
-            update_open_pin(pin[1], int(state))
+        if pin[4] == state:
+            update_open_pin(pin_number, int(state))
             update_close_pin(pin[0], 1)
-            if pin(4) == 0:
-                wp.digitalWrite(pin[1], pin[4])
-                wp.digitalWrite(pin[0], pin[3])
-                break
+            wp.digitalWrite(pin_number, pin[4])
+            wp.digitalWrite(pin[0], pin[3])
             break
     return redirect("/")
 
@@ -116,13 +114,11 @@ def toggle_close_pin(pin_number):
     state=int(request.form['state'])
     pins=get_pins()
     for pin in pins:
-        if pin[0] == pin_number:
-            update_close_pin(pin[0], int(state))
+        if pin[3] == state:
             update_open_pin(pin[1], 1)
-            if pin(4) == 0:
-                wp.digitalWrite(pin[0], pin[3])
-                wp.digitalWrite(pin[1], pin[4])
-                break
+            update_close_pin(pin_number, int(state))
+            wp.digitalWrite(pin[1], pin[4])
+            wp.digitalWrite(pin_number, pin[3])
             break
     return redirect("/")
 
