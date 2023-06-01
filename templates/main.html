@@ -27,7 +27,6 @@
               <p>Status: Control PIN {{ pin[0] }} & PIN {{ pin[1] }}</p>
             </div>
             <div class="panel-footer">
-              {% if pin[4] == 1 %}
               <!-- Control open pin -->
               <form
                 action="/toggle_open_pin/{{ pin[1] }}"
@@ -36,21 +35,9 @@
                 onsubmit="console.log('PanelId:', '{{ pin[1] }}'); updatePanelBody(event, '{{ pin[1] }}')"
                 class="btn-space"
               >
-                <input type="hidden" name="state" value="0" />
-                <button type="submit" class="btn btn-primary">Open</button>
+                <input type="hidden" name="state" value="{% if pin[4] == 1 %}0{% else %}1{% endif %}" />
+                <button type="submit" class="btn {% if pin[4] == 1 %}btn-primary{% else %}btn-danger{% endif %}">{% if pin[4] == 1 %}Open{% else %}Stop Open{% endif %}</button>
               </form>
-              {% else %}
-              <form
-                action="/toggle_open_pin/{{ pin[1] }}"
-                method="POST"
-                data-message="Berhenti Membuka {{pin[2]}}"
-                onsubmit="console.log('PanelId:', '{{ pin[1] }}'); updatePanelBody(event, '{{ pin[1] }}')"
-                class="btn-space"
-              >
-                <input type="hidden" name="state" value="1" />
-                <button type="submit" class="btn btn-danger">Stop Open</button>
-              </form>
-              {% endif %} {% if pin[3] == 1 %}
               <!-- Control odd pin -->
               <form
                 action="/toggle_close_pin/{{ pin[0] }}"
@@ -59,21 +46,9 @@
                 onsubmit="console.log('PanelId:', '{{ pin[1] }}'); updatePanelBody(event, '{{ pin[1] }}')"
                 class="btn-space"
               >
-                <input type="hidden" name="state" value="0" />
-                <button type="submit" class="btn btn-primary">Close</button>
+                <input type="hidden" name="state" value="{% if pin[3] == 1 %}0{% else %}1{% endif %}" />
+                <button type="submit" class="btn {% if pin[3] == 1 %}btn-primary{% else %}btn-danger{% endif %}">{% if pin[3] == 1 %}Close{% else %}Stop Close{% endif %}</button>
               </form>
-              {% else %}
-              <form
-                action="/toggle_close_pin/{{ pin[0] }}"
-                method="POST"
-                data-message="Berhenti Menutup {{pin[2]}}"
-                onsubmit="console.log('PanelId:', '{{ pin[1] }}'); updatePanelBody(event, '{{ pin[1] }}')"
-                class="btn-space"
-              >
-                <input type="hidden" name="state" value="1" />
-                <button type="submit" class="btn btn-danger">Stop Close</button>
-              </form>
-              {% endif %}
               <form
                 action="/stop_pin/{{ pin[0] }}/{{ pin[1] }}"
                 method="POST"
