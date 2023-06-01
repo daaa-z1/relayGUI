@@ -72,7 +72,7 @@ def turn_on_pin(pin_number):
     if pin_number % 2 == 0:
         wp.digitalWrite(pin_number, int(pin_state))
         update_pin_state(None, pin_number, None, int(pin_state))
-    else:
+    elif pin_number % 2 == 1:
         wp.digitalWrite(pin_number, int(pin_state))
         update_pin_state(pin_number, None, int(pin_state), None)
     return redirect("/")
@@ -83,7 +83,7 @@ def turn_off_pin(pin_number):
     if pin_number % 2 == 0:
         wp.digitalWrite(pin_number, int(pin_state))
         update_pin_state(None, pin_number, None, int(pin_state))
-    else:
+    elif pin_number % 2 == 1:
         wp.digitalWrite(pin_number, int(pin_state))
         update_pin_state(pin_number, None, int(pin_state), None)
     return redirect("/")
