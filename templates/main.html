@@ -28,64 +28,69 @@
             </div>
             <div class="panel-footer">
               <div class="row">
-                <!-- Control open pin -->
-                <form
-                  method="POST"
-                  data-message="Membuka {{ pin[2] }}"
-                  onsubmit="console.log('PanelId:', '{{ pin[1] }}'); updatePanelBody(event, '{{ pin[1] }}'); event.stopPropagation();"
-                  class="btn-space"
-                >
-                  <input
-                    type="hidden"
-                    name="state"
-                    value="{% if pin[4] == 1 %}0{% else %}1{% endif %}"
-                  />
-                  <button
-                    type="submit"
-                    class="btn {% if pin[4] == 1 %}btn-primary{% else %}btn-danger{% endif %}"
-                    onclick="toggleOpenPin({{ pin[1] }}, {{ pin[4] }}); event.stopPropagation();"
+                <div class="col-md-4">
+                  <!-- Control open pin -->
+                  <form
+                    method="POST"
+                    data-message="Membuka {{ pin[2] }}"
+                    onsubmit="console.log('PanelId:', '{{ pin[1] }}'); updatePanelBody(event, '{{ pin[1] }}'); event.stopPropagation();"
+                    class="btn-space"
                   >
-                    {% if pin[4] == 1 %}Buka{% else %}Hentikan Buka{% endif %}
-                  </button>
-                </form>
-
-                <!-- Control close pin -->
-                <form
-                  method="POST"
-                  data-message="Menutup {{ pin[2] }}"
-                  onsubmit="console.log('PanelId:', '{{ pin[1] }}'); updatePanelBody(event, '{{ pin[1] }}'); event.stopPropagation();"
-                  class="btn-space"
-                >
-                  <input
-                    type="hidden"
-                    name="state"
-                    value="{% if pin[3] == 1 %}0{% else %}1{% endif %}"
-                  />
-                  <button
-                    type="submit"
-                    class="btn {% if pin[3] == 1 %}btn-primary{% else %}btn-danger{% endif %}"
-                    onclick="toggleClosePin({{ pin[0] }}, {{ pin[3] }}); event.stopPropagation();"
+                    <input
+                      type="hidden"
+                      name="state"
+                      value="{% if pin[4] == 1 %}0{% else %}1{% endif %}"
+                    />
+                    <button
+                      type="submit"
+                      class="btn {% if pin[4] == 1 %}btn-primary{% else %}btn-danger{% endif %}"
+                      onclick="toggleOpenPin({{ pin[1] }}, {{ pin[4] }}); event.stopPropagation();"
+                    >
+                      {% if pin[4] == 1 %}Buka{% else %}Hentikan Buka{% endif %}
+                    </button>
+                  </form>
+                </div>
+                <div class="col-md-4">
+                  <!-- Control close pin -->
+                  <form
+                    method="POST"
+                    data-message="Menutup {{ pin[2] }}"
+                    onsubmit="console.log('PanelId:', '{{ pin[1] }}'); updatePanelBody(event, '{{ pin[1] }}'); event.stopPropagation();"
+                    class="btn-space"
                   >
-                    {% if pin[3] == 1 %}Tutup{% else %}Hentikan Tutup{% endif %}
-                  </button>
-                </form>
-
-                <!-- Stop pin operation -->
-                <form
-                  method="POST"
-                  data-message="Pembatalan Pengoperasian {{ pin[2] }}"
-                  onsubmit="console.log('PanelId:', '{{ pin[1] }}'); updatePanelBody(event, '{{ pin[1] }}'); event.stopPropagation();"
-                  class="btn-space"
-                >
-                  <input type="hidden" name="state" value="1" />
-                  <button
-                    type="submit"
-                    class="btn btn-warning"
-                    onclick="stopPin({{ pin[0] }}, {{ pin[1] }}); event.stopPropagation();"
+                    <input
+                      type="hidden"
+                      name="state"
+                      value="{% if pin[3] == 1 %}0{% else %}1{% endif %}"
+                    />
+                    <button
+                      type="submit"
+                      class="btn {% if pin[3] == 1 %}btn-primary{% else %}btn-danger{% endif %}"
+                      onclick="toggleClosePin({{ pin[0] }}, {{ pin[3] }}); event.stopPropagation();"
+                    >
+                      {% if pin[3] == 1 %}Tutup{% else %}Hentikan Tutup{% endif
+                      %}
+                    </button>
+                  </form>
+                </div>
+                <div class="col-md-4">
+                  <!-- Stop pin operation -->
+                  <form
+                    method="POST"
+                    data-message="Pembatalan Pengoperasian {{ pin[2] }}"
+                    onsubmit="console.log('PanelId:', '{{ pin[1] }}'); updatePanelBody(event, '{{ pin[1] }}'); event.stopPropagation();"
+                    class="btn-space"
                   >
-                    Stop
-                  </button>
-                </form>
+                    <input type="hidden" name="state" value="1" />
+                    <button
+                      type="submit"
+                      class="btn btn-warning"
+                      onclick="stopPin({{ pin[0] }}, {{ pin[1] }}); event.stopPropagation();"
+                    >
+                      Stop
+                    </button>
+                  </form>
+                </div>
               </div>
               <form
                 action="/delete_pin/{{ pin[0] }}/{{ pin[1] }}"
