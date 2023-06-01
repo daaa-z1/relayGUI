@@ -59,7 +59,7 @@
                 action="/turn_on_pin/{{ pin[0] }}"
                 method="POST"
                 data-message="Menutup {{pin[2]}}"
-                onsubmit="updatePanelBody(event)"
+                onsubmit="updatePanelBody(event, '{{ pin[1] }}')"
                 class="btn-space"
               >
                 <input type="hidden" name="state" value="0" />
@@ -71,7 +71,7 @@
                 action="/turn_off_pin/{{ pin[0] }}"
                 method="POST"
                 data-message="Berhenti Menutup {{pin[2]}}"
-                onsubmit="updatePanelBody(event)"
+                onsubmit="updatePanelBody(event, '{{ pin[1] }}')"
                 class="btn-space"
               >
                 <input type="hidden" name="state" value="1" />
@@ -171,12 +171,11 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
     <script>
-      function updatePanelBody(event) {
+      function updatePanelBody(event, panelId) {
         event.preventDefault();
         const form = event.target;
         const message = form.getAttribute("data-message");
-        const panelBodyId = form.getAttribute("name");
-        const panelBody = document.getElementById("panel-body-" + panelBodyId);
+        const panelBody = document.getElementById("panel-body-" + panelId);
         panelBody.innerHTML = "<p>Status: " + message + "</p>";
       }
     </script>
