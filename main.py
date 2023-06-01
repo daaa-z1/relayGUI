@@ -67,24 +67,13 @@ def home():
 
 # Function to handle on/off button
 @app.route('/turn_on_pin/<int:pin_number>', methods=['POST'])
-def turn_on_pin_route(pin_number):
-    if pin_number % 2 == 0:
-        wp.digitalWrite(pin_number, 0)
-        update_pin_state(None, pin_number, None, 0)
-    else:
-        wp.digitalWrite(pin_number, 0)
-        update_pin_state(pin_number, None, 0, None)
-    return redirect("/")
-
-# Function to handle on/off button
-@app.route('/turn_on_pin/<int:pin_number>', methods=['POST'])
 def turn_on_pin(pin_number):
     pin_state = request.form['state']
     if pin_number % 2 == 0:
-        wp.digitalWrite(pin_number, 0)
+        wp.digitalWrite(pin_number, int(pin_state))
         update_pin_state(None, pin_number, None, int(pin_state))
     else:
-        wp.digitalWrite(pin_number, 0)
+        wp.digitalWrite(pin_number, int(pin_state))
         update_pin_state(pin_number, None, int(pin_state), None)
     return redirect("/")
 
@@ -92,19 +81,20 @@ def turn_on_pin(pin_number):
 def turn_off_pin(pin_number):
     pin_state = request.form['state']
     if pin_number % 2 == 0:
-        wp.digitalWrite(pin_number, 1)
+        wp.digitalWrite(pin_number, int(pin_state))
         update_pin_state(None, pin_number, None, int(pin_state))
     else:
-        wp.digitalWrite(pin_number, 1)
+        wp.digitalWrite(pin_number, int(pin_state))
         update_pin_state(pin_number, None, int(pin_state), None)
     return redirect("/")
 
 # Route for stopping pin operation
 @app.route('/stop_pin/<int:odd_pin>/<int:even_pin>', methods=['POST'])
 def stop_pin_route(odd_pin, even_pin):
-    wp.digitalWrite(odd_pin, 1)
-    wp.digitalWrite(even_pin, 1)
-    update_pin_state(odd_pin, even_pin, 1, 1)
+    state = int(request.form['state'])
+    wp.digitalWrite(odd_pin, state)
+    wp.digitalWrite(even_pin, state)
+    update_pin_state(odd_pin, even_pin, state, state)
     return redirect("/")
 
 # Route for adding a pin
