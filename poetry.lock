@@ -1,7 +1,0 @@
-[[package]]
-name = "Flask"
-version = "2.0.1"
-description = "A lightweight Python web framework"
-category = "main"
-optional = false
-python-versions = "*"
