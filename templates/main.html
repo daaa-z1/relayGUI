@@ -97,85 +97,27 @@
           </div>
         </div>
         {% endfor %}
-      </div>
-      <div class="row">
-        <div class="col-md-4">
-          <button
-            type="button"
-            class="btn btn-primary btn-lg"
-            data-toggle="modal"
-            data-target="#addPinModal"
-          >
-            Add Pin
-          </button>
-        </div>
-      </div>
-    </div>
+    </table>
 
-    <!-- Add Pin Modal -->
-    <div
-      class="modal fade"
-      id="addPinModal"
-      tabindex="-1"
-      role="dialog"
-      aria-labelledby="addPinModalLabel"
-    >
-      <div class="modal-dialog" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h4 class="modal-title" id="addPinModalLabel">Add Pin</h4>
-          </div>
-          <div class="modal-body">
-            <form action="/add_pin" method="POST">
-              <div class="form-group">
-                <label for="evenPin">Open Pin Number:</label>
-                <input
-                  type="text"
-                  class="form-control"
-                  id="evenPin"
-                  placeholder="Even Number"
-                  name="open_pin"
-                />
-              </div>
-              <div class="form-group">
-                <label for="oddPin">Close Pin Number:</label>
-                <input
-                  type="text"
-                  class="form-control"
-                  id="oddPin"
-                  placeholder="Odd Number"
-                  name="close_pin"
-                />
-              </div>
-              <div class="form-group">
-                <label for="pinName">Pin Name:</label>
-                <input
-                  type="text"
-                  class="form-control"
-                  id="pinName"
-                  name="name"
-                />
-              </div>
-              <button type="submit" class="btn btn-primary">Add</button>
-            </form>
-          </div>
-        </div>
-      </div>
-    </div>
+    <h2>Add Pin</h2>
 
-    <!-- Latest compiled and minified JavaScript -->
-    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <form action="/add_pin" method="POST">
+        <label for="odd_pin">Odd Pin:</label>
+        <input type="number" id="odd_pin" name="odd_pin" required><br><br>
 
-    <script>
-      function updatePanelBody(event) {
-        event.preventDefault();
-        const form = event.target;
-        const message = form.getAttribute("data-message");
-        const panelBodyId = form.getAttribute("action").split("/").pop();
-        const panelBody = document.getElementById("panel-body-" + panelBodyId);
-        panelBody.innerHTML = "<p>Status: " + message + "</p>";
-      }
-    </script>
-  </body>
+        <label for="even_pin">Even Pin:</label>
+        <input type="number" id="even_pin" name="even_pin" required><br><br>
+
+        <label for="name">Name:</label>
+        <input type="text" id="name" name="name" required><br><br>
+
+        <button type="submit">Add</button>
+    </form>
+
+    <h2>Stop All Pins</h2>
+
+    <form action="/stop_pin/0/0" method="POST">
+        <button type="submit">Stop All Pins</button>
+    </form>
+</body>
 </html>
