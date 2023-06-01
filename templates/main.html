@@ -23,17 +23,16 @@
             <div class="panel-heading">
               <h3 class="panel-title text-center">{{ pin[2] }}</h3>
             </div>
-            <div class="panel-body" id="panel-body-{{ pin[0] }}">
+            <div class="panel-body" id="panel-body-{{ pin[0] }}-{{ pin[1] }}">
               <p>
-                Status: {% if pin[3] == 1 %}Door is Closed{% else %}Door is
-                Open{% endif %}
+                Status: Control PIN {{ pin[0] }} & PIN {{ pin[1] }}
               </p>
             </div>
             <div class="panel-footer">
-              {% if pin[0] % 2 == 1 %}
-              <!-- Control even pin -->
+              {% if pin[5] == 1 %}
+              <!-- Control open pin -->
               <form
-                action="/toggle_pin/{{ pin[1] }}"
+                action="/turn_on_pin/{{ pin[1] }}"
                 method="POST"
                 data-message="Membuka {{pin[2]}}"
                 onsubmit="updatePanelBody(event)"
@@ -42,8 +41,9 @@
                 <input type="hidden" name="state" value="1" />
                 <button type="submit" class="btn btn-primary">Open</button>
               </form>
+              {% else %}
               <form
-                action="/toggle_pin/{{ pin[1] }}"
+                action="/turn_off_pin/{{ pin[1] }}"
                 method="POST"
                 data-message="Berhenti Membuka {{pin[2]}}"
                 onsubmit="updatePanelBody(event)"
@@ -52,10 +52,11 @@
                 <input type="hidden" name="state" value="0" />
                 <button type="submit" class="btn btn-danger">Stop Open</button>
               </form>
-              {% else %}
+              {% endif %}
+              {% if pin[4] == 1 %}
               <!-- Control odd pin -->
               <form
-                action="/toggle_pin/{{ pin[0] }}"
+                action="/turn_on_pin/{{ pin[0] }}"
                 method="POST"
                 data-message="Menutup {{pin[2]}}"
                 onsubmit="updatePanelBody(event)"
@@ -64,8 +65,9 @@
                 <input type="hidden" name="state" value="1" />
                 <button type="submit" class="btn btn-primary">Close</button>
               </form>
+              {% else %}
               <form
-                action="/toggle_pin/{{ pin[0] }}"
+                action="/turn_off_pin/{{ pin[0] }}"
                 method="POST"
                 data-message="Berhenti Menutup {{pin[2]}}"
                 onsubmit="updatePanelBody(event)"
@@ -78,7 +80,7 @@
               </form>
               {% endif %}
               <form
-                action="/stop_pin/{{ pin[0] }}//{{pin[1]}}"
+                action="/stop_pin/{{ pin[0] }}/{{ pin[1] }}"
                 method="POST"
                 data-message="Pembatalan Pengoperasian {{pin[2]}}"
                 onsubmit="updatePanelBody(event)"
