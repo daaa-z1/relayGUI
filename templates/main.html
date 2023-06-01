@@ -180,56 +180,72 @@
     <!-- Latest compiled and minified JavaScript -->
     <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
 
-    <!-- Latest compiled and minified JavaScript -->
-    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
-
     <script>
-      // Function to handle toggle open pin button
-      function toggleOpenPin(pinNumber) {
-        var state = $("input[name='state_" + pinNumber + "']:checked").val();
+      // Fungsi untuk mengubah status pin terbuka
+      function toggleOpenPin(pinNumber, currentState) {
+        const newState = currentState === 1 ? 0 : 1;
+        const url = "/toggle_open_pin/" + pinNumber;
+        const formData = new FormData();
+        formData.append("state", newState);
 
-        $.post("/toggle_open_pin/" + pinNumber, { state: state })
-          .done(function (data) {
-            // Update the panel body or any other element with the received data
-            $("#panel-body-" + pinNumber).html(data);
+        fetch(url, {
+          method: "POST",
+          body: formData,
+        })
+          .then((response) => {
+            if (response.ok) {
+              location.reload(); // Memperbarui halaman setelah respons diterima
+            } else {
+              throw new Error("Error: " + response.status);
+            }
           })
-          .fail(function () {
-            // Handle the failure case, show an error message or perform any other action
-            alert("Failed to toggle open pin.");
+          .catch((error) => {
+            console.log(error);
           });
       }
 
-      // Function to handle toggle close pin button
-      function toggleClosePin(pinNumber) {
-        var state = $("input[name='state_" + pinNumber + "']:checked").val();
+      // Fungsi untuk mengubah status pin tertutup
+      function toggleClosePin(pinNumber, currentState) {
+        const newState = currentState === 1 ? 0 : 1;
+        const url = "/toggle_close_pin/" + pinNumber;
+        const formData = new FormData();
+        formData.append("state", newState);
 
-        $.post("/toggle_close_pin/" + pinNumber, { state: state })
-          .done(function (data) {
-            // Update the panel body or any other element with the received data
-            $("#panel-body-" + pinNumber).html(data);
+        fetch(url, {
+          method: "POST",
+          body: formData,
+        })
+          .then((response) => {
+            if (response.ok) {
+              location.reload(); // Memperbarui halaman setelah respons diterima
+            } else {
+              throw new Error("Error: " + response.status);
+            }
           })
-          .fail(function () {
-            // Handle the failure case, show an error message or perform any other action
-            alert("Failed to toggle close pin.");
+          .catch((error) => {
+            console.log(error);
           });
       }
 
-      // Function to handle stop pin button
-      function stopPin(oddPin, evenPin) {
-        var state = $(
-          "input[name='state_stop_" + oddPin + "_" + evenPin + "']:checked"
-        ).val();
+      // Fungsi untuk menghentikan operasi pin
+      function stopPin(evenPin, oddPin) {
+        const url = "/stop_pin/" + evenPin + "/" + oddPin;
+        const formData = new FormData();
+        formData.append("state", 1);
 
-        $.post("/stop_pin/" + oddPin + "/" + evenPin, { state: state })
-          .done(function (data) {
-            // Update the panel body or any other element with the received data
-            // You can update multiple elements based on the response if needed
-            $("#panel-body-" + oddPin).html(data);
-            $("#panel-body-" + evenPin).html(data);
+        fetch(url, {
+          method: "POST",
+          body: formData,
+        })
+          .then((response) => {
+            if (response.ok) {
+              location.reload(); // Memperbarui halaman setelah respons diterima
+            } else {
+              throw new Error("Error: " + response.status);
+            }
           })
-          .fail(function () {
-            // Handle the failure case, show an error message or perform any other action
-            alert("Failed to stop pin.");
+          .catch((error) => {
+            console.log(error);
           });
       }
     </script>

@@ -96,16 +96,16 @@ def home():
 
 @app.route('/toggle_open_pin/<int:pin_number>', methods=['POST'])
 def toggle_open_pin(pin_number):
-    state = request.form.get('state', '0')
-    update_open_pin(pin_number, int(state))
-    wp.digitalWrite(pin_number, int(state))
+    state = int(request.form['state'])
+    update_open_pin(pin_number, state)
+    wp.digitalWrite(pin_number, state)
     return redirect("/")
 
 @app.route('/toggle_close_pin/<int:pin_number>', methods=['POST'])
 def toggle_close_pin(pin_number):
-    state = request.form.get('state', '0')
-    update_close_pin(pin_number, int(state))
-    wp.digitalWrite(pin_number, int(state))
+    state = int(request.form['state'])
+    update_close_pin(pin_number, state)
+    wp.digitalWrite(pin_number, state)
     return redirect("/")
 
 
@@ -114,11 +114,11 @@ def toggle_close_pin(pin_number):
 
 @app.route('/stop_pin/<int:odd_pin>/<int:even_pin>', methods=['POST'])
 def stop_pin_route(odd_pin, even_pin):
-    state = request.form.get('state', '0')
-    update_close_pin(odd_pin, int(state))
-    update_open_pin(even_pin, int(state))
-    wp.digitalWrite(odd_pin, int(state))
-    wp.digitalWrite(even_pin, int(state))
+    state = int(request.form['state'])
+    update_close_pin(odd_pin, state)
+    update_open_pin(even_pin, state)
+    wp.digitalWrite(odd_pin, state)
+    wp.digitalWrite(even_pin, state)
     return redirect("/")
 
 
