@@ -79,9 +79,9 @@ def setup_pins():
     pins = get_pins()
     for pin in pins:
         wp.pinMode(pin[0], 1)
-        wp.digitalWrite(pin[0], 1)
+        wp.digitalWrite(pin[0], pin[3])
         wp.pinMode(pin[1], 1)
-        wp.digitalWrite(pin[1], 1)
+        wp.digitalWrite(pin[1], pin[4])
 
 # Route for the home page
 
