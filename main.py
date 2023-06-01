@@ -36,7 +36,7 @@ def get_pins():
 def update_open_pin(pin_number, state):
     conn = sqlite3.connect(db_path)
     c = conn.cursor()
-    c.execute('UPDATE pins SET even_state=? WHERE even_pin=?', (state, pin_number))
+    c.execute('UPDATE pins SET even_state=? WHERE odd_pin=?', (state, pin_number))  # Update even_state for odd_pin
     conn.commit()
     conn.close()
 
@@ -46,7 +46,7 @@ def update_open_pin(pin_number, state):
 def update_close_pin(pin_number, state):
     conn = sqlite3.connect(db_path)
     c = conn.cursor()
-    c.execute('UPDATE pins SET odd_state=? WHERE odd_pin=?', (state, pin_number))
+    c.execute('UPDATE pins SET odd_state=? WHERE even_pin=?', (state, pin_number))  # Update odd_state for even_pin
     conn.commit()
     conn.close()
 
@@ -99,6 +99,10 @@ def toggle_open_pin(pin_number):
     state = int(request.form['state'])
     update_open_pin(pin_number, state)
     wp.digitalWrite(pin_number, state)
+    
+    # Send request to toggle_close_pin with state=1
+    toggle_close_pin(pin_number, 1)
+    
     return redirect("/")
 
 @app.route('/toggle_close_pin/<int:pin_number>', methods=['POST'])
@@ -106,6 +110,10 @@ def toggle_close_pin(pin_number):
     state = int(request.form['state'])
     update_close_pin(pin_number, state)
     wp.digitalWrite(pin_number, state)
+    
+    # Send request to toggle_open_pin with state=1
+    toggle_open_pin(pin_number, 1)
+    
     return redirect("/")
 
 
