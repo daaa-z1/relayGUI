@@ -80,7 +80,7 @@
                 <button
                   type="submit"
                   class="btn btn-warning"
-                  onclick="stopPinOperation({{ pin[0] }}, {{ pin[1] }})"
+                  onclick="stopPin({{ pin[0] }}, {{ pin[1] }})"
                 >
                   Stop
                 </button>
@@ -177,74 +177,42 @@
         console.log("Update panel body called for panelId:", panelId);
       }
     </script>
-    <script>
-      // Fungsi untuk mengubah status pin terbuka
-      function toggleOpenPin(pinNumber, currentState) {
-        const newState = currentState === 1 ? 0 : 1;
-        const url = "/toggle_open_pin/" + pinNumber;
-        const formData = new FormData();
-        formData.append("state", newState);
+    <!-- Latest compiled and minified JavaScript -->
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
 
-        fetch(url, {
-          method: "POST",
-          body: formData,
-        })
-          .then((response) => {
-            if (response.ok) {
-              // Perbarui panel body atau lakukan tindakan lain yang diperlukan
-            } else {
-              throw new Error("Error: " + response.status);
-            }
-          })
-          .catch((error) => {
-            console.log(error);
-          });
-      }
+<script>
+  // Function to handle toggle open pin button
+  function toggleOpenPin(pinNumber) {
+    var state = $("input[name='state_" + pinNumber + "']:checked").val();
 
-      // Fungsi untuk mengubah status pin tertutup
-      function toggleClosePin(pinNumber, currentState) {
-        const newState = currentState === 1 ? 0 : 1;
-        const url = "/toggle_close_pin/" + pinNumber;
-        const formData = new FormData();
-        formData.append("state", newState);
+    $.post("/toggle_open_pin/" + pinNumber, { state: state }, function(data) {
+      // Update the panel body or any other element with the received data
+      $("#panel-body-" + pinNumber).html(data);
+    });
+  }
 
-        fetch(url, {
-          method: "POST",
-          body: formData,
-        })
-          .then((response) => {
-            if (response.ok) {
-              // Perbarui panel body atau lakukan tindakan lain yang diperlukan
-            } else {
-              throw new Error("Error: " + response.status);
-            }
-          })
-          .catch((error) => {
-            console.log(error);
-          });
-      }
+  // Function to handle toggle close pin button
+  function toggleClosePin(pinNumber) {
+    var state = $("input[name='state_" + pinNumber + "']:checked").val();
 
-      // Fungsi untuk menghentikan operasi pin
-      function stopPinOperation(evenPin, oddPin) {
-        const url = "/stop_pin/" + evenPin + "/" + oddPin;
-        const formData = new FormData();
-        formData.append("state", 1);
+    $.post("/toggle_close_pin/" + pinNumber, { state: state }, function(data) {
+      // Update the panel body or any other element with the received data
+      $("#panel-body-" + pinNumber).html(data);
+    });
+  }
 
-        fetch(url, {
-          method: "POST",
-          body: formData,
-        })
-          .then((response) => {
-            if (response.ok) {
-              // Perbarui panel body atau lakukan tindakan lain yang diperlukan
-            } else {
-              throw new Error("Error: " + response.status);
-            }
-          })
-          .catch((error) => {
-            console.log(error);
-          });
-      }
-    </script>
+  // Function to handle stop pin button
+  function stopPin(oddPin, evenPin) {
+    var state = $("input[name='state_stop_" + oddPin + "_" + evenPin + "']:checked").val();
+
+    $.post("/stop_pin/" + oddPin + "/" + evenPin, { state: state }, function(data) {
+      // Update the panel body or any other element with the received data
+      // You can update multiple elements based on the response if needed
+      $("#panel-body-" + oddPin).html(data);
+      $("#panel-body-" + evenPin).html(data);
+    });
+  }
+</script>
+
   </body>
 </html>
