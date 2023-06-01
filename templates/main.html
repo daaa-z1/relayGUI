@@ -18,7 +18,7 @@
       <h1 class="text-center">GPIO Control</h1>
       <div class="row">
         {% for pin in pins %}
-        <div class="col-md-6">
+        <div class="col-md-4">
           <div class="panel panel-default">
             <div class="panel-heading">
               <h3 class="panel-title text-center">{{ pin[2] }}</h3>
@@ -26,7 +26,7 @@
             <div class="panel-body" id="panel-body-{{ pin[1] }}">
               <p>Status: Control PIN {{ pin[0] }} & PIN {{ pin[1] }}</p>
             </div>
-            <div class="panel-footer">
+            <div class="panel-footer col-md-4">
               {% if pin[4] == 1 %}
               <!-- Control open pin -->
               <form
