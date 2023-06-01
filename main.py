@@ -59,22 +59,6 @@ def setup_pins():
         wp.pinMode(pin[1], 1)
         wp.digitalWrite(pin[1], 1)
 
-# Function to turn on an odd pin
-def turn_on_odd_pin(odd_pin):
-    wp.digitalWrite(odd_pin, wp.GPIO.HIGH)
-
-# Function to turn off an odd pin
-def turn_off_odd_pin(odd_pin):
-    wp.digitalWrite(odd_pin, wp.GPIO.LOW)
-
-# Function to turn on an even pin
-def turn_on_even_pin(even_pin):
-    wp.digitalWrite(even_pin, wp.GPIO.HIGH)
-
-# Function to turn off an even pin
-def turn_off_even_pin(even_pin):
-    wp.digitalWrite(even_pin, wp.GPIO.LOW)
-
 # Route for the home page
 @app.route('/')
 def home():
@@ -105,8 +89,9 @@ def turn_off_pin_route(pin_number):
 # Route for stopping pin operation
 @app.route('/stop_pin/<int:odd_pin>/<int:even_pin>', methods=['POST'])
 def stop_pin_route(odd_pin, even_pin):
-    turn_off_odd_pin(odd_pin)
-    turn_off_even_pin(even_pin)
+    wp.digtalWrite(odd_pin, 1)
+    wp.digtalWrite(even_pin, 1)
+    update_pin_state(odd_pin, even_pin, 1, 1)
     return redirect("/")
 
 # Route for adding a pin
