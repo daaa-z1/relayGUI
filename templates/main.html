@@ -205,6 +205,7 @@
           });
       }
 
+      // Fungsi untuk mengubah status pin tertutup
       function toggleClosePin(pinNumber, currentState) {
         const newState = currentState === 1 ? 0 : 1;
         const url = "/toggle_close_pin/" + pinNumber;
