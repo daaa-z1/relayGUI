@@ -178,41 +178,60 @@
       }
     </script>
     <!-- Latest compiled and minified JavaScript -->
-<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
 
-<script>
-  // Function to handle toggle open pin button
-  function toggleOpenPin(pinNumber) {
-    var state = $("input[name='state_" + pinNumber + "']:checked").val();
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
 
-    $.post("/toggle_open_pin/" + pinNumber, { state: state }, function(data) {
-      // Update the panel body or any other element with the received data
-      $("#panel-body-" + pinNumber).html(data);
-    });
-  }
+    <script>
+      // Function to handle toggle open pin button
+      function toggleOpenPin(pinNumber) {
+        var state = $("input[name='state_" + pinNumber + "']:checked").val();
 
-  // Function to handle toggle close pin button
-  function toggleClosePin(pinNumber) {
-    var state = $("input[name='state_" + pinNumber + "']:checked").val();
+        $.post("/toggle_open_pin/" + pinNumber, { state: state })
+          .done(function (data) {
+            // Update the panel body or any other element with the received data
+            $("#panel-body-" + pinNumber).html(data);
+          })
+          .fail(function () {
+            // Handle the failure case, show an error message or perform any other action
+            alert("Failed to toggle open pin.");
+          });
+      }
 
-    $.post("/toggle_close_pin/" + pinNumber, { state: state }, function(data) {
-      // Update the panel body or any other element with the received data
-      $("#panel-body-" + pinNumber).html(data);
-    });
-  }
+      // Function to handle toggle close pin button
+      function toggleClosePin(pinNumber) {
+        var state = $("input[name='state_" + pinNumber + "']:checked").val();
 
-  // Function to handle stop pin button
-  function stopPin(oddPin, evenPin) {
-    var state = $("input[name='state_stop_" + oddPin + "_" + evenPin + "']:checked").val();
+        $.post("/toggle_close_pin/" + pinNumber, { state: state })
+          .done(function (data) {
+            // Update the panel body or any other element with the received data
+            $("#panel-body-" + pinNumber).html(data);
+          })
+          .fail(function () {
+            // Handle the failure case, show an error message or perform any other action
+            alert("Failed to toggle close pin.");
+          });
+      }
 
-    $.post("/stop_pin/" + oddPin + "/" + evenPin, { state: state }, function(data) {
-      // Update the panel body or any other element with the received data
-      // You can update multiple elements based on the response if needed
-      $("#panel-body-" + oddPin).html(data);
-      $("#panel-body-" + evenPin).html(data);
-    });
-  }
-</script>
+      // Function to handle stop pin button
+      function stopPin(oddPin, evenPin) {
+        var state = $(
+          "input[name='state_stop_" + oddPin + "_" + evenPin + "']:checked"
+        ).val();
 
+        $.post("/stop_pin/" + oddPin + "/" + evenPin, { state: state })
+          .done(function (data) {
+            // Update the panel body or any other element with the received data
+            // You can update multiple elements based on the response if needed
+            $("#panel-body-" + oddPin).html(data);
+            $("#panel-body-" + evenPin).html(data);
+          })
+          .fail(function () {
+            // Handle the failure case, show an error message or perform any other action
+            alert("Failed to stop pin.");
+          });
+      }
+    </script>
   </body>
 </html>
