@@ -99,10 +99,6 @@ def toggle_open_pin(pin_number):
     state = int(request.form['state'])
     update_open_pin(pin_number, state)
     wp.digitalWrite(pin_number, state)
-    
-    # Send request to toggle_close_pin with state=1
-    toggle_close_pin(pin_number, 1)
-    
     return redirect("/")
 
 @app.route('/toggle_close_pin/<int:pin_number>', methods=['POST'])
@@ -110,10 +106,6 @@ def toggle_close_pin(pin_number):
     state = int(request.form['state'])
     update_close_pin(pin_number, state)
     wp.digitalWrite(pin_number, state)
-    
-    # Send request to toggle_open_pin with state=1
-    toggle_open_pin(pin_number, 1)
-    
     return redirect("/")
 
 
