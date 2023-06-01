@@ -3,7 +3,7 @@ import wiringpi as wp
 import sqlite3
 
 app = Flask(__name__)
-db_path = 'pins.db'  # Path to the SQLite database file
+db_path = 'pins2.db'  # Path to the SQLite database file
 
 # Set up WiringOPi
 wp.wiringPiSetup()
