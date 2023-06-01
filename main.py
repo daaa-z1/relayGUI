@@ -61,22 +61,22 @@ def setup_pins():
 
 # Function to turn on an odd pin
 def turn_on_odd_pin(odd_pin):
-    wp.digitalWrite(odd_pin, 1)
+    wp.digitalWrite(odd_pin, wp.GPIO.HIGH)
     update_pin_state(odd_pin, None, 0, None)
 
 # Function to turn off an odd pin
 def turn_off_odd_pin(odd_pin):
-    wp.digitalWrite(odd_pin, 1)
+    wp.digitalWrite(odd_pin, wp.GPIO.LOW)
     update_pin_state(odd_pin, None, 1, None)
 
 # Function to turn on an even pin
 def turn_on_even_pin(even_pin):
-    wp.digitalWrite(even_pin, 0)
+    wp.digitalWrite(even_pin, wp.GPIO.HIGH)
     update_pin_state(None, even_pin, None, 0)
 
 # Function to turn off an even pin
 def turn_off_even_pin(even_pin):
-    wp.digitalWrite(even_pin, 1)
+    wp.digitalWrite(even_pin, wp.GPIO.LOW)
     update_pin_state(None, even_pin, None, 1)
 
 # Route for the home page
