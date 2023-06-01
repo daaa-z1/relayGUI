@@ -76,21 +76,34 @@ def turn_on_pin_route(pin_number):
         update_pin_state(pin_number, None, 0, None)
     return redirect("/")
 
+# Function to handle on/off button
+@app.route('/turn_on_pin/<int:pin_number>', methods=['POST'])
+def turn_on_pin_route(pin_number):
+    pin_state = request.form['state']
+    if pin_number % 2 == 0:
+        wp.digitalWrite(pin_number, 0)
+        update_pin_state(None, pin_number, None, int(pin_state))
+    else:
+        wp.digitalWrite(pin_number, 0)
+        update_pin_state(pin_number, None, int(pin_state), None)
+    return redirect("/")
+
 @app.route('/turn_off_pin/<int:pin_number>', methods=['POST'])
 def turn_off_pin_route(pin_number):
+    pin_state = request.form['state']
     if pin_number % 2 == 0:
         wp.digitalWrite(pin_number, 1)
-        update_pin_state(None, pin_number, None, 1)
+        update_pin_state(None, pin_number, None, int(pin_state))
     else:
         wp.digitalWrite(pin_number, 1)
-        update_pin_state(pin_number, None, 1, None)
+        update_pin_state(pin_number, None, int(pin_state), None)
     return redirect("/")
 
 # Route for stopping pin operation
 @app.route('/stop_pin/<int:odd_pin>/<int:even_pin>', methods=['POST'])
 def stop_pin_route(odd_pin, even_pin):
-    wp.digtalWrite(odd_pin, 1)
-    wp.digtalWrite(even_pin, 1)
+    wp.digitalWrite(odd_pin, 1)
+    wp.digitalWrite(even_pin, 1)
     update_pin_state(odd_pin, even_pin, 1, 1)
     return redirect("/")
 
