@@ -66,7 +66,7 @@
                     <button
                       type="submit"
                       class="btn {% if pin[3] == 1 %}btn-primary{% else %}btn-danger{% endif %}"
-                      onclick="toggleClosePin('{{ pin[1] }}', {{ pin[3] }}); event.stopPropagation();"
+                      onclick="toggleClosePin('{{ pin[0] }}', {{ pin[3] }}); event.stopPropagation();"
                     >
                       {% if pin[3] == 1 %}Tutup{% else %}Hentikan Tutup{% endif
                       %}
@@ -183,6 +183,7 @@
         console.log("Update panel body called for panelId:", panelId);
       }
 
+      // Fungsi untuk mengubah status pin terbuka
       function toggleOpenPin(pinNumber, currentState) {
         const newState = currentState === 1 ? 0 : 1;
         const url = "/toggle_open_pin/" + pinNumber;
@@ -195,7 +196,8 @@
         })
           .then((response) => {
             if (response.ok) {
-              location.reload();
+              toggleClosePin(pinNumber, 1); // Mengubah status tombol close menjadi low
+              location.reload(); // Memperbarui halaman setelah respons diterima
             } else {
               throw new Error("Error: " + response.status);
             }
@@ -217,7 +219,8 @@
         })
           .then((response) => {
             if (response.ok) {
-              location.reload();
+              toggleOpenPin(pinNumber, 1); // Mengubah status tombol open menjadi low
+              location.reload(); // Memperbarui halaman setelah respons diterima
             } else {
               throw new Error("Error: " + response.status);
             }
