@@ -36,8 +36,7 @@ def get_pins():
 def update_open_pin(pin_number, state):
     conn = sqlite3.connect(db_path)
     c = conn.cursor()
-    c.execute('UPDATE pins SET even_state=? WHERE even_pin=?',
-              (state, pin_number))
+    c.execute('UPDATE pins SET even_state=? WHERE even_pin=?', (state, pin_number))
     conn.commit()
     conn.close()
 
@@ -47,8 +46,7 @@ def update_open_pin(pin_number, state):
 def update_close_pin(pin_number, state):
     conn = sqlite3.connect(db_path)
     c = conn.cursor()
-    c.execute('UPDATE pins SET odd_state=? WHERE odd_pin=?',
-              (state, pin_number))
+    c.execute('UPDATE pins SET odd_state=? WHERE odd_pin=?', (state, pin_number))
     conn.commit()
     conn.close()
 
@@ -81,9 +79,9 @@ def setup_pins():
     pins = get_pins()
     for pin in pins:
         wp.pinMode(pin[0], 1)
-        wp.digitalWrite(pin[0], pin[3])
+        wp.digitalWrite(pin[0], 1)
         wp.pinMode(pin[1], 1)
-        wp.digitalWrite(pin[1], pin[4])
+        wp.digitalWrite(pin[1], 1)
 
 # Route for the home page
 
@@ -99,36 +97,24 @@ def home():
 @app.route('/toggle_open_pin/<int:pin_number>', methods=['POST'])
 def toggle_open_pin(pin_number):
     state = int(request.form['state'])
-    pins = get_pins()
-    for pin in pins:
-        if pin[4] == state:
-            update_open_pin(pin_number, int(state))
-            update_close_pin(pin[0], 1)
-            wp.digitalWrite(pin_number, pin[4])
-            wp.digitalWrite(pin[0], pin[3])
-            break
+    update_open_pin(pin_number, state)
+    wp.digitalWrite(pin_number, state)
     return redirect("/")
 
-@ app.route('/toggle_close_pin/<int:pin_number>', methods=['POST'])
+@app.route('/toggle_close_pin/<int:pin_number>', methods=['POST'])
 def toggle_close_pin(pin_number):
-    state=int(request.form['state'])
-    pins=get_pins()
-    for pin in pins:
-        if pin[3] == state:
-            update_open_pin(pin[1], 1)
-            update_close_pin(pin_number, int(state))
-            wp.digitalWrite(pin[1], pin[4])
-            wp.digitalWrite(pin_number, pin[3])
-            break
+    state = int(request.form['state'])
+    update_close_pin(pin_number, state)
+    wp.digitalWrite(pin_number, state)
     return redirect("/")
 
 
 # Route for stopping pin operation
 
 
-@ app.route('/stop_pin/<int:odd_pin>/<int:even_pin>', methods=['POST'])
+@app.route('/stop_pin/<int:odd_pin>/<int:even_pin>', methods=['POST'])
 def stop_pin_route(odd_pin, even_pin):
-    state=int(request.form['state'])
+    state = int(request.form['state'])
     update_close_pin(odd_pin, state)
     update_open_pin(even_pin, state)
     wp.digitalWrite(odd_pin, state)
@@ -139,11 +125,11 @@ def stop_pin_route(odd_pin, even_pin):
 # Route for adding a pin
 
 
-@ app.route('/add_pin', methods=['POST'])
+@app.route('/add_pin', methods=['POST'])
 def add_pin_route():
-    odd_pin=int(request.form['odd_pin'])
-    even_pin=int(request.form['even_pin'])
-    name=request.form['name']
+    odd_pin = int(request.form['odd_pin'])
+    even_pin = int(request.form['even_pin'])
+    name = request.form['name']
     add_pin(odd_pin, even_pin, name)
     setup_pins()
     return redirect("/")
@@ -151,7 +137,7 @@ def add_pin_route():
 # Route for deleting a pin
 
 
-@ app.route('/delete_pin/<int:odd_pin>/<int:even_pin>', methods=['POST'])
+@app.route('/delete_pin/<int:odd_pin>/<int:even_pin>', methods=['POST'])
 def delete_pin_route(odd_pin, even_pin):
     delete_pin(odd_pin, even_pin)
     return redirect("/")
