@@ -62,22 +62,18 @@ def setup_pins():
 # Function to turn on an odd pin
 def turn_on_odd_pin(odd_pin):
     wp.digitalWrite(odd_pin, wp.GPIO.HIGH)
-    update_pin_state(odd_pin, None, 0, None)
 
 # Function to turn off an odd pin
 def turn_off_odd_pin(odd_pin):
     wp.digitalWrite(odd_pin, wp.GPIO.LOW)
-    update_pin_state(odd_pin, None, 1, None)
 
 # Function to turn on an even pin
 def turn_on_even_pin(even_pin):
     wp.digitalWrite(even_pin, wp.GPIO.HIGH)
-    update_pin_state(None, even_pin, None, 0)
 
 # Function to turn off an even pin
 def turn_off_even_pin(even_pin):
     wp.digitalWrite(even_pin, wp.GPIO.LOW)
-    update_pin_state(None, even_pin, None, 1)
 
 # Route for the home page
 @app.route('/')
@@ -89,17 +85,21 @@ def home():
 @app.route('/turn_on_pin/<int:pin_number>', methods=['POST'])
 def turn_on_pin_route(pin_number):
     if pin_number % 2 == 0:
-        turn_on_even_pin(pin_number)
+        wp.digitalWrite(pin_number, 0)
+        update_pin_state(None, pin_number, None, 0)
     else:
-        turn_on_odd_pin(pin_number)
+        wp.digitalWrite(pin_number, 0)
+        update_pin_state(pin_number, None, 0, None)
     return redirect("/")
 
 @app.route('/turn_off_pin/<int:pin_number>', methods=['POST'])
 def turn_off_pin_route(pin_number):
     if pin_number % 2 == 0:
-        turn_off_even_pin(pin_number)
+        wp.digitalWrite(pin_number, 1)
+        update_pin_state(None, pin_number, None, 1)
     else:
-        turn_off_odd_pin(pin_number)
+        wp.digitalWrite(pin_number, 1)
+        update_pin_state(pin_number, None, 1, None)
     return redirect("/")
 
 # Route for stopping pin operation
