@@ -1,25 +1,123 @@
 <!DOCTYPE html>
-<head>
-   <title>RPi Web Server</title>
-   <!-- Latest compiled and minified CSS -->
-   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
-   <!-- Optional theme -->
-   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
-   <!-- Latest compiled and minified JavaScript -->
-   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
-</head>
+<html>
+  <head>
+    <title>GPIO Control</title>
+    <!-- Latest compiled and minified CSS -->
+    <link
+      rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+    />
+    <style>
+      .btn-space {
+        margin-bottom: 10px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1 class="text-center">GPIO Control</h1>
+      <div class="row">
+        {% for pin in pins %}
+        <div class="col-md-4">
+          <div class="panel panel-default">
+            <div class="panel-heading">
+              <h3 class="panel-title text-center">{{ pin[2] }}</h3>
+            </div>
+            <div class="panel-body" id="panel-body-{{ pin[0] }}">
+              <p>
+                Status: {% if pin[3] == 1 %}Door is Closed{% else %}Door is
+                Open{% endif %}
+              </p>
+            </div>
+            <div class="panel-footer">
+              {% if pin[0] % 2 == 0 %}
+              <!-- Control even pin -->
+              <form
+                action="/toggle_pin/{{ pin[1] }}"
+                method="POST"
+                data-message="Membuka {{pin[2]}}"
+                onsubmit="updatePanelBody(event)"
+                class="btn-space"
+              >
+                <input type="hidden" name="state" value="1" />
+                <button type="submit" class="btn btn-primary">Open</button>
+              </form>
+              <form
+                action="/toggle_pin/{{ pin[1] }}"
+                method="POST"
+                data-message="Berhenti Membuka {{pin[2]}}"
+                onsubmit="updatePanelBody(event)"
+                class="btn-space"
+              >
+                <input type="hidden" name="state" value="0" />
+                <button type="submit" class="btn btn-danger">Stop Open</button>
+              </form>
+              {% else %}
+              <!-- Control odd pin -->
+              <form
+                action="/toggle_pin/{{ pin[0] }}"
+                method="POST"
+                data-message="Menutup {{pin[2]}}"
+                onsubmit="updatePanelBody(event)"
+                class="btn-space"
+              >
+                <input type="hidden" name="state" value="1" />
+                <button type="submit" class="btn btn-primary">Close</button>
+              </form>
+              <form
+                action="/toggle_pin/{{ pin[0] }}"
+                method="POST"
+                data-message="Berhenti Menutup {{pin[2]}}"
+                onsubmit="updatePanelBody(event)"
+                class="btn-space"
+              >
+                <input type="hidden" name="state" value="0" />
+                <button type="submit" class="btn btn-danger">
+                  Stop Close
+                </button>
+              </form>
+              {% endif %}
+              <form
+                action="/delete_pin/{{ pin[0] }}/{{ pin[1] }}"
+                method="POST"
+              >
+                <button type="submit" class="btn btn-danger">Delete</button>
+              </form>
+              <form
+                action="/toggle_pin/{{ pin[3] }}"
+                method="POST"
+                data-message="Pembatalan Pengoperasian {{pin[2]}}"
+                onsubmit="updatePanelBody(event)"
+                class="btn-space"
+              >
+                <input type="hidden" name="state" value="2" />
+                <button type="submit" class="btn btn-warning">Stop</button>
+              </form>
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+    </table>
 
-<body>
-   <h1>RPi Web Server</h1>
-   {% for pin in pins %}
-   <h2>{{ pins[pin].name }}
-   {% if pins[pin].state == true %}
-      is currently <strong>on</strong></h2><div class="row"><div class="col-md-2">
-      <a href="/{{pin}}/off" class="btn btn-block btn-lg btn-default" role="button">Turn off</a></div></div>
-   {% else %}
-      is currently <strong>off</strong></h2><div class="row"><div class="col-md-2">
-      <a href="/{{pin}}/on" class="btn btn-block btn-lg btn-primary" role="button">Turn on</a></div></div>
-   {% endif %}
-   {% endfor %}
+    <h2>Add Pin</h2>
+
+    <form action="/add_pin" method="POST">
+        <label for="odd_pin">Odd Pin:</label>
+        <input type="number" id="odd_pin" name="odd_pin" required><br><br>
+
+        <label for="even_pin">Even Pin:</label>
+        <input type="number" id="even_pin" name="even_pin" required><br><br>
+
+        <label for="name">Name:</label>
+        <input type="text" id="name" name="name" required><br><br>
+
+        <button type="submit">Add</button>
+    </form>
+
+    <h2>Stop All Pins</h2>
+
+    <form action="/stop_pin/0/0" method="POST">
+        <button type="submit">Stop All Pins</button>
+    </form>
 </body>
 </html>

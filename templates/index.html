@@ -19,7 +19,7 @@
               <h3 class="panel-title">Pin {{ pin[0] }}: {{ pin[1] }}</h3>
             </div>
             <div class="panel-body">
-              <p>Status: {% if pin[2] == 1 %}On{% else %}Off{% endif %}</p>
+              <p>Status: {% if pin[2] == 1 %}Door is Close{% else %}Door is Open{% endif %}</p>
             </div>
             <div class="panel-footer">
               <form action="/toggle_pin/{{ pin[0] }}" method="POST">
@@ -29,7 +29,7 @@
                   value="{% if pin[2] == 1 %}0{% else %}1{% endif %}"
                 />
                 <button type="submit" class="btn btn-primary">
-                  {% if pin[2] == 1 %}Turn Off{% else %}Turn On{% endif %}
+                  {% if pin[2] == 1 %}Open{% else %}Close{% endif %}
                 </button>
               </form>
               <form action="/delete_pin/{{ pin[0] }}" method="POST">
