@@ -38,7 +38,7 @@ def update_pin_state(odd_pin, even_pin, odd_state, even_state):
 def add_pin(odd_pin, even_pin, name):
     conn = sqlite3.connect(db_path)
     c = conn.cursor()
-    c.execute('INSERT INTO pins (odd_pin, even_pin, name, state) VALUES (?, ?, ?, 1, 1)', (odd_pin, even_pin, name))
+    c.execute('INSERT INTO pins (odd_pin, even_pin, name, odd_state, even_state) VALUES (?, ?, ?, 1, 1)', (odd_pin, even_pin, name))
     conn.commit()
     conn.close()
 
@@ -61,7 +61,7 @@ def setup_pins():
 
 # Function to turn on an odd pin
 def turn_on_odd_pin(odd_pin):
-    wp.digitalWrite(odd_pin, pin[3])
+    wp.digitalWrite(odd_pin, 1)
     update_pin_state(odd_pin, None, 0, None)
 
 # Function to turn off an odd pin
