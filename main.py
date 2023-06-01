@@ -142,14 +142,7 @@ def delete_pin_route(odd_pin, even_pin):
     delete_pin(odd_pin, even_pin)
     return redirect("/")
 
-# Function to run on app startup
-
-
-def startup():
+if __name__ == '__main__':
     create_table()
     setup_pins()
-
-
-if __name__ == '__main__':
-    startup()
     app.run(host='0.0.0.0', port=8000, debug=True)
