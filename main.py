@@ -30,7 +30,7 @@ def get_pins():
 def update_pin_state(odd_pin, even_pin, odd_state, even_state):
     conn = sqlite3.connect(db_path)
     c = conn.cursor()
-    c.execute('UPDATE pins SET odd_state=? AND even_state=? WHERE odd_pin=? AND even_pin=?', (odd_state, even_state, odd_pin, even_pin))
+    c.execute('UPDATE pins SET odd_state=?, even_state=? WHERE odd_pin=? AND even_pin=?', (odd_state, even_state, odd_pin, even_pin))
     conn.commit()
     conn.close()
 
