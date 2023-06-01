@@ -27,7 +27,7 @@
               <p>Status: Control PIN {{ pin[0] }} & PIN {{ pin[1] }}</p>
             </div>
             <div class="panel-footer">
-              <div class="d-flex justify-content-between">
+              <div class="row">
                 <!-- Control open pin -->
                 <form
                   method="POST"
@@ -86,15 +86,14 @@
                     Stop
                   </button>
                 </form>
-
-                <form
-                  action="/delete_pin/{{ pin[0] }}/{{ pin[1] }}"
-                  method="POST"
-                  onsubmit="return confirm('Apakah Anda yakin ingin menghapus {{ pin[2] }}?');"
-                >
-                  <button type="submit" class="btn btn-danger">Delete</button>
-                </form>
               </div>
+              <form
+                action="/delete_pin/{{ pin[0] }}/{{ pin[1] }}"
+                method="POST"
+                onsubmit="return confirm('Apakah Anda yakin ingin menghapus {{ pin[2] }}?');"
+              >
+                <button type="submit" class="btn btn-danger">Delete</button>
+              </form>
             </div>
           </div>
           {% endfor %}
