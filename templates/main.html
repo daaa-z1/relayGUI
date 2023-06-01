@@ -44,7 +44,7 @@
                     <button
                       type="submit"
                       class="btn {% if pin[4] == 1 %}btn-primary{% else %}btn-danger{% endif %}"
-                      onclick="toggleOpenPin('{{ pin[1] }}', {{ pin[4] }}); event.stopPropagation();"
+                      onclick="toggleOpenPin({{ pin[1] }}, {{ pin[4] }}); event.stopPropagation();"
                     >
                       {% if pin[4] == 1 %}Buka{% else %}Hentikan Buka{% endif %}
                     </button>
@@ -66,7 +66,7 @@
                     <button
                       type="submit"
                       class="btn {% if pin[3] == 1 %}btn-primary{% else %}btn-danger{% endif %}"
-                      onclick="toggleClosePin('{{ pin[0] }}', {{ pin[3] }}); event.stopPropagation();"
+                      onclick="toggleClosePin({{ pin[0] }}, {{ pin[3] }}); event.stopPropagation();"
                     >
                       {% if pin[3] == 1 %}Tutup{% else %}Hentikan Tutup{% endif
                       %}
