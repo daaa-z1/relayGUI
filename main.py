@@ -113,8 +113,8 @@ def toggle_close_pin(pin_number):
     pins = get_pins()
     for pin in pins:
         if pin[0] == pin_number:
-            update_open_pin(pin[1], int(state))
-            update_close_pin(pin[0], 1)
+            update_open_pin(pin[1], 1)
+            update_close_pin(pin[0], int(state))
             wp.digitalWrite(pin[1], pin[4])
             wp.digitalWrite(pin[0], pin[3])
             break
