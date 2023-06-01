@@ -66,25 +66,25 @@ def home():
     return render_template('main.html', pins=pins)
 
 # Function to handle on/off button
-@app.route('/turn_on_pin/<int:pin_number>', methods=['POST'])
+@app.route('/toggle_open_pin/<int:pin_number>', methods=['POST'])
 def turn_on_pin(pin_number):
-    pin_state = request.form['state']
-    if pin_number % 2 == 0:
-        wp.digitalWrite(pin_number, int(pin_state))
-        update_pin_state(None, pin_number, None, int(pin_state))
-    elif pin_number % 2 == 1:
-        wp.digitalWrite(pin_number, int(pin_state))
-        update_pin_state(pin_number, None, int(pin_state), None)
+    pin_state = int(request.form['state'])
+    if pin_state == 1:
+        wp.digitalWrite(pin_number, pin_state)
+        update_pin_state(None, pin_number, None, pin_state)
+    else:
+        wp.digitalWrite(pin_number, pin_state)
+        update_pin_state(pin_number, None, pin_state, None)
     return redirect("/")
 
-@app.route('/turn_off_pin/<int:pin_number>', methods=['POST'])
+@app.route('/toggle_close_pin/<int:pin_number>', methods=['POST'])
 def turn_off_pin(pin_number):
-    pin_state = request.form['state']
-    if pin_number % 2 == 0:
-        wp.digitalWrite(pin_number, int(pin_state))
-        update_pin_state(None, pin_number, None, int(pin_state))
-    elif pin_number % 2 == 1:
-        wp.digitalWrite(pin_number, int(pin_state))
+    pin_state = int(request.form['state'])
+    if pin_state == 0:
+        wp.digitalWrite(pin_number, pin_state)
+        update_pin_state(None, pin_number, None, pin_state)
+    else:
+        wp.digitalWrite(pin_number, pin_state)
         update_pin_state(pin_number, None, int(pin_state), None)
     return redirect("/")
 
