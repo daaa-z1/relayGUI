@@ -128,6 +128,7 @@ def add_pin_route():
     even_pin = int(request.form['even_pin'])
     name = request.form['name']
     add_pin(odd_pin, even_pin, name)
+    setup_pins()
     return redirect("/")
 
 # Route for deleting a pin
