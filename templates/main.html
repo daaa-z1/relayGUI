@@ -182,7 +182,6 @@
         panelBody.innerHTML = "<p>Status: " + message + "</p>";
         console.log("Update panel body called for panelId:", panelId);
       }
-
       // Fungsi untuk mengubah status pin terbuka
       function toggleOpenPin(pinNumber, currentState) {
         const newState = currentState === 1 ? 0 : 1;
@@ -197,7 +196,6 @@
           .then((response) => {
             if (response.ok) {
               location.reload(); // Memperbarui halaman setelah respons diterima
-              toggleClosePin(pinNumber, 1); // Mengubah status tombol close menjadi low
             } else {
               throw new Error("Error: " + response.status);
             }
@@ -221,7 +219,6 @@
           .then((response) => {
             if (response.ok) {
               location.reload(); // Memperbarui halaman setelah respons diterima
-              toggleOpenPin(pinNumber, 1); // Mengubah status tombol open menjadi low
             } else {
               throw new Error("Error: " + response.status);
             }
