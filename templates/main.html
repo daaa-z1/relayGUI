@@ -30,7 +30,6 @@
               {% if pin[4] == 1 %}
               <!-- Control open pin -->
               <form
-                name="{{ pin[1]+=1 }}"
                 action="/turn_on_pin/{{ pin[1] }}"
                 method="POST"
                 data-message="Membuka {{pin[2]}}"
@@ -79,7 +78,6 @@
               </form>
               {% endif %}
               <form
-                name="{{ pin[1]+=1 }}"
                 action="/stop_pin/{{ pin[0] }}/{{ pin[1] }}"
                 method="POST"
                 data-message="Pembatalan Pengoperasian {{pin[2]}}"
