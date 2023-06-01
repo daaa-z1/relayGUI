@@ -103,7 +103,7 @@ def toggle_open_pin(pin_number):
             wp.digitalWrite(pin[0], int(state))
             update_open_pin(pin[0], int(state))
             break
-    return redirect(url_for('home'))
+    return redirect(url_for('home'), code=302)
 
 
 
@@ -116,7 +116,7 @@ def toggle_close_pin(pin_number):
             wp.digitalWrite(pin[1], int(state))
             update_close_pin(pin[1], int(state))
             break
-    return redirect(url_for('home'))
+    return redirect(url_for('home'), code=302)
 
 
 # Route for stopping pin operation
@@ -133,7 +133,7 @@ def stop_pin_route(odd_pin, even_pin):
         elif pin[1] == even_pin:
             wp.digitalWrite(pin[1], state)
             update_open_pin(pin[1], state)
-    return redirect(url_for('home'))
+    return redirect(url_for('home'), code=302)
 
 
 # Route for adding a pin
