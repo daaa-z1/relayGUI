@@ -88,24 +88,16 @@ def home():
 @app.route('/toggle_open_pin/<int:pin_number>', methods=['POST'])
 def toggle_open_pin(pin_number):
     pin_state = int(request.form['state'])
-    if pin_state == 1:
-        wp.digitalWrite(pin_number, pin_state)
-        update_pin_state(None, pin_number, None, pin_state)
-    else:
-        wp.digitalWrite(pin_number, pin_state)
-        update_pin_state(None, pin_number, None, pin_state)
+    wp.digitalWrite(pin_number, pin_state)
+    update_pin_state(None, pin_number, None, pin_state)
     return redirect("/")
 
 
 @app.route('/toggle_close_pin/<int:pin_number>', methods=['POST'])
 def toggle_close_pin(pin_number):
     pin_state = int(request.form['state'])
-    if pin_state == 0:
-        wp.digitalWrite(pin_number, pin_state)
-        update_pin_state(pin_number, None, int(pin_state), None)
-    else:
-        wp.digitalWrite(pin_number, pin_state)
-        update_pin_state(pin_number, None, int(pin_state), None)
+    wp.digitalWrite(pin_number, pin_state)
+    update_pin_state(pin_number, None, int(pin_state), None)
     return redirect("/")
 
 # Route for stopping pin operation
