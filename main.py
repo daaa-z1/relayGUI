@@ -78,7 +78,7 @@ def turn_on_pin_route(pin_number):
 
 # Function to handle on/off button
 @app.route('/turn_on_pin/<int:pin_number>', methods=['POST'])
-def turn_on_pin_route(pin_number):
+def turn_on_pin(pin_number):
     pin_state = request.form['state']
     if pin_number % 2 == 0:
         wp.digitalWrite(pin_number, 0)
@@ -89,7 +89,7 @@ def turn_on_pin_route(pin_number):
     return redirect("/")
 
 @app.route('/turn_off_pin/<int:pin_number>', methods=['POST'])
-def turn_off_pin_route(pin_number):
+def turn_off_pin(pin_number):
     pin_state = request.form['state']
     if pin_number % 2 == 0:
         wp.digitalWrite(pin_number, 1)
