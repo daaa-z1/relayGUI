@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect
+from flask import Flask, render_template, request, redirect, url_for
 import wiringpi as wp
 import sqlite3
 
@@ -103,7 +103,7 @@ def toggle_open_pin(pin_number):
             wp.digitalWrite(pin[0], int(state))
             update_open_pin(pin[0], int(state))
             break
-    return redirect("/")
+    return redirect(url_for('home'))
 
 
 
@@ -116,7 +116,7 @@ def toggle_close_pin(pin_number):
             wp.digitalWrite(pin[1], int(state))
             update_close_pin(pin[1], int(state))
             break
-    return redirect("/")
+    return redirect(url_for('home'))
 
 
 # Route for stopping pin operation
@@ -133,7 +133,7 @@ def stop_pin_route(odd_pin, even_pin):
         elif pin[1] == even_pin:
             wp.digitalWrite(pin[1], state)
             update_open_pin(pin[1], state)
-    return redirect("/")
+    return redirect(url_for('home'))
 
 
 # Route for adding a pin
