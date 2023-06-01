@@ -129,4 +129,4 @@ def stop_pin_route(odd_pin, even_pin):
 if __name__ == '__main__':
     create_table()
     setup_pins()
-    app.runhost='0.0.0.0', port=8000, debug=True)
+    app.run(host='0.0.0.0', port=8000, debug=True)
