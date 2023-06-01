@@ -29,9 +29,8 @@
             <div class="panel-footer">
               <!-- Control open pin -->
               <form
-                action="/toggle_open_pin/{{ pin[1] }}"
                 method="POST"
-                data-message="Membuka {{pin[2]}}"
+                data-message="Membuka {{ pin[2] }}"
                 onsubmit="console.log('PanelId:', '{{ pin[1] }}'); updatePanelBody(event, '{{ pin[1] }}')"
                 class="btn-space"
               >
@@ -43,16 +42,16 @@
                 <button
                   type="submit"
                   class="btn {% if pin[4] == 1 %}btn-primary{% else %}btn-danger{% endif %}"
-                  onclick="toggle_close_pin(pin[1])"
+                  onclick="toggleOpenPin({{ pin[1] }}, {{ pin[4] }})"
                 >
-                  {% if pin[4] == 1 %}Open{% else %}Stop Open{% endif %}
+                  {% if pin[4] == 1 %}Buka{% else %}Hentikan Buka{% endif %}
                 </button>
               </form>
-              <!-- Control odd pin -->
+
+              <!-- Control close pin -->
               <form
-                action="/toggle_close_pin/{{ pin[0] }}"
                 method="POST"
-                data-message="Menutup {{pin[2]}}"
+                data-message="Menutup {{ pin[2] }}"
                 onsubmit="console.log('PanelId:', '{{ pin[1] }}'); updatePanelBody(event, '{{ pin[1] }}')"
                 class="btn-space"
               >
@@ -64,15 +63,16 @@
                 <button
                   type="submit"
                   class="btn {% if pin[3] == 1 %}btn-primary{% else %}btn-danger{% endif %}"
-                  onclick="toggle_close_pin(pin[0])"
+                  onclick="toggleClosePin({{ pin[0] }}, {{ pin[3] }})"
                 >
-                  {% if pin[3] == 1 %}Close{% else %}Stop Close{% endif %}
+                  {% if pin[3] == 1 %}Tutup{% else %}Hentikan Tutup{% endif %}
                 </button>
               </form>
+
+              <!-- Stop pin operation -->
               <form
-                action="/stop_pin/{{ pin[0] }}/{{ pin[1] }}"
                 method="POST"
-                data-message="Pembatalan Pengoperasian {{pin[2]}}"
+                data-message="Pembatalan Pengoperasian {{ pin[2] }}"
                 onsubmit="console.log('PanelId:', '{{ pin[1] }}'); updatePanelBody(event, '{{ pin[1] }}')"
                 class="btn-space"
               >
@@ -80,11 +80,12 @@
                 <button
                   type="submit"
                   class="btn btn-warning"
-                  onclick="stop_pin_route(pin[0], pin[1])"
+                  onclick="stopPinOperation({{ pin[0] }}, {{ pin[1] }})"
                 >
                   Stop
                 </button>
               </form>
+
               <form
                 action="/delete_pin/{{ pin[0] }}/{{ pin[1] }}"
                 method="POST"
@@ -174,6 +175,75 @@
         const panelBody = document.getElementById("panel-body-" + panelId);
         panelBody.innerHTML = "<p>Status: " + message + "</p>";
         console.log("Update panel body called for panelId:", panelId);
+      }
+    </script>
+    <script>
+      // Fungsi untuk mengubah status pin terbuka
+      function toggleOpenPin(pinNumber, currentState) {
+        const newState = currentState === 1 ? 0 : 1;
+        const url = "/toggle_open_pin/" + pinNumber;
+        const formData = new FormData();
+        formData.append("state", newState);
+
+        fetch(url, {
+          method: "POST",
+          body: formData,
+        })
+          .then((response) => {
+            if (response.ok) {
+              // Perbarui panel body atau lakukan tindakan lain yang diperlukan
+            } else {
+              throw new Error("Error: " + response.status);
+            }
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+      }
+
+      // Fungsi untuk mengubah status pin tertutup
+      function toggleClosePin(pinNumber, currentState) {
+        const newState = currentState === 1 ? 0 : 1;
+        const url = "/toggle_close_pin/" + pinNumber;
+        const formData = new FormData();
+        formData.append("state", newState);
+
+        fetch(url, {
+          method: "POST",
+          body: formData,
+        })
+          .then((response) => {
+            if (response.ok) {
+              // Perbarui panel body atau lakukan tindakan lain yang diperlukan
+            } else {
+              throw new Error("Error: " + response.status);
+            }
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+      }
+
+      // Fungsi untuk menghentikan operasi pin
+      function stopPinOperation(evenPin, oddPin) {
+        const url = "/stop_pin/" + evenPin + "/" + oddPin;
+        const formData = new FormData();
+        formData.append("state", 1);
+
+        fetch(url, {
+          method: "POST",
+          body: formData,
+        })
+          .then((response) => {
+            if (response.ok) {
+              // Perbarui panel body atau lakukan tindakan lain yang diperlukan
+            } else {
+              throw new Error("Error: " + response.status);
+            }
+          })
+          .catch((error) => {
+            console.log(error);
+          });
       }
     </script>
   </body>
