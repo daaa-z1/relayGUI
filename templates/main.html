@@ -77,17 +77,14 @@
                   <!-- Stop pin operation -->
                   <form
                     method="POST"
-                    data-message="Pembatalan Pengoperasian {{ pin[2] }}"
-                    onsubmit="console.log('PanelId:', '{{ pin[1] }}'); updatePanelBody(event, '{{ pin[1] }}'); event.stopPropagation();"
                     class="btn-space"
                   >
                     <input type="hidden" name="state" value="1" />
                     <button
                       type="submit"
-                      class="btn btn-warning"
-                      onclick="stopPin({{ pin[0] }}, {{ pin[1] }}); event.stopPropagation();"
+                      class="btn btn-success"
                     >
-                      Stop
+                      {% if pin[3] == 0 %}Close{% elif pin[4] == 0 %}Open{% elif pin[3]&&pin[4] == 1 %}Close{% else %}Close{% endif %}
                     </button>
                   </form>
                 </div>
