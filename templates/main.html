@@ -32,7 +32,6 @@
               </p>
             </div>
             <div class="panel-footer">
-              <div class="row">
                 <div class="col-md-4">
                   <!-- Control open pin -->
                   <form
@@ -50,6 +49,7 @@
                       type="submit"
                       class="btn {% if pin[4] == 1 %}btn-primary{% else %}btn-danger{% endif %}"
                       onclick="toggleOpenPin({{ pin[1] }}, {{ pin[4] }}); event.stopPropagation();"
+                      disabled
                     >
                       {% if pin[4] == 1 %}Open{% else %}Stop Open{% endif %}
                     </button>
@@ -89,7 +89,6 @@
                     </button>
                   </form>
                 </div>
-              </div>
               <div  id="del" style="display: none;">
                 <form
                   action="/delete_pin/{{ pin[0] }}/{{ pin[1] }}"
