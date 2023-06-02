@@ -84,7 +84,7 @@
                       type="submit"
                       class="btn btn-success"
                     >
-                      {% if pin[3] == 0 %}Close{% elif pin[4] == 0 %}Open{% elif pin[3]&&pin[4] == 1 %}Close{% else %}Close{% endif %}
+                      {% if pin[3] == 0 %}Close{% elif pin[4] == 0 %}Open{% elif pin[3] == 1 && pin[4] == 1 %}Close{% else %}Close{% endif %}
                     </button>
                   </form>
                 </div>
