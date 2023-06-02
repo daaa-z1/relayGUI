@@ -36,7 +36,7 @@ def get_pins():
 def update_open_pin(pin_number, state):
     conn = sqlite3.connect(db_path)
     c = conn.cursor()
-    c.execute('UPDATE pins SET even_state=? WHERE odd_pin=?', (state, pin_number))  # Update even_state for odd_pin
+    c.execute('UPDATE pins SET even_state=? WHERE even_pin=?', (state, pin_number))
     conn.commit()
     conn.close()
 
@@ -46,7 +46,7 @@ def update_open_pin(pin_number, state):
 def update_close_pin(pin_number, state):
     conn = sqlite3.connect(db_path)
     c = conn.cursor()
-    c.execute('UPDATE pins SET odd_state=? WHERE even_pin=?', (state, pin_number))  # Update odd_state for even_pin
+    c.execute('UPDATE pins SET odd_state=? WHERE odd_pin=?', (state, pin_number))
     conn.commit()
     conn.close()
 
