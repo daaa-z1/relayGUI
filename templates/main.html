@@ -51,7 +51,7 @@
                       class="btn {% if pin[4] == 1 %}btn-primary{% else %}btn-danger{% endif %}"
                       onclick="toggleOpenPin({{ pin[1] }}, {{ pin[4] }}); event.stopPropagation();"
                     >
-                      {% if pin[4] == 1 %}Buka{% else %}Hentikan Buka{% endif %}
+                      {% if pin[4] == 1 %}Open{% else %}Stop Open{% endif %}
                     </button>
                   </form>
                 </div>
@@ -84,25 +84,27 @@
                       class="btn {% if pin[3] == 1 %}btn-primary{% else %}btn-danger{% endif %}"
                       onclick="toggleClosePin({{ pin[0] }}, {{ pin[3] }}); event.stopPropagation();"
                     >
-                      {% if pin[3] == 1 %}Tutup{% else %}Hentikan Tutup{% endif
+                      {% if pin[3] == 1 %}Close{% else %}Stop Close{% endif
                       %}
                     </button>
                   </form>
                 </div>
               </div>
-              <form
-                action="/delete_pin/{{ pin[0] }}/{{ pin[1] }}"
-                method="POST"
-                onsubmit="return confirm('Apakah Anda yakin ingin menghapus {{ pin[2] }}?');"
-              >
-                <button type="submit" class="btn btn-danger">Delete</button>
-              </form>
+              <div  id="del">
+                <form
+                  action="/delete_pin/{{ pin[0] }}/{{ pin[1] }}"
+                  method="POST"
+                  onsubmit="return confirm('Apakah Anda yakin ingin menghapus {{ pin[2] }}?');"
+                >
+                  <button type="submit" class="btn btn-danger">Delete</button>
+                </form>
+              </div>
             </div>
           </div>
           {% endfor %}
         </div>
       </div>
-      <div class="row">
+      <div id="add"class="row">
         <div class="col-md-4">
           <button
             type="button"
@@ -180,6 +182,20 @@
         panelBody.innerHTML = "<p>Status: " + message + "</p>";
         console.log("Update panel body called for panelId:", panelId);
       }
+      
+      // Fungsi untuk hide button
+      function hideButton() {
+        var x = document.getElementById("del");
+        let y = document.getElementById("add");
+        if (x.style.display === "none" && y.style.display === "none") {
+          x.style.display = "block";
+          y.style.display = "block";
+        } else {
+          x.style.display = "none";
+          y.style.display = "none";
+        }
+      }
+      
       // Fungsi untuk mengubah status pin terbuka
       function toggleOpenPin(pinNumber, currentState) {
         const newState = currentState === 1 ? 0 : 1;
