@@ -51,6 +51,17 @@
                   </form>
                 </div>
                 <div class="col-md-4">
+                  <!-- Stop pin operation -->
+                  <form method="POST" class="btn-space">
+                    <input type="hidden" name="state" value="1" />
+                    <button type="submit" class="btn btn-success">
+                      {% if pin[3] == 0 %}Close{% elif pin[4] == 0 %}Open{% elif
+                      pin[3] == 1 and pin[4] == 1 %}Stop{% else %}Stop{% endif
+                      %}
+                    </button>
+                  </form>
+                </div>
+                <div class="col-md-4">
                   <!-- Control close pin -->
                   <form
                     method="POST"
@@ -70,21 +81,6 @@
                     >
                       {% if pin[3] == 1 %}Tutup{% else %}Hentikan Tutup{% endif
                       %}
-                    </button>
-                  </form>
-                </div>
-                <div class="col-md-4">
-                  <!-- Stop pin operation -->
-                  <form
-                    method="POST"
-                    class="btn-space"
-                  >
-                    <input type="hidden" name="state" value="1" />
-                    <button
-                      type="submit"
-                      class="btn btn-success"
-                    >
-                      {% if pin[3] == 0 %}Close{% elif pin[4] == 0 %}Open{% elif pin[3] == 1 and pin[4] == 1 %}Stop{% else %}Stop{% endif %}
                     </button>
                   </form>
                 </div>
