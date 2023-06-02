@@ -27,69 +27,67 @@
               <p>
                 Status: {% if pin[3] == 0 %}Closing {{pin[2]}}{% elif pin[4] ==
                 0 %}Open {{pin[2]}}{% elif pin[3] == 1 and pin[4] == 1 %}Control
-                Pin {{pin[0]}} & Pin {{pin[1]}}{% else %}Control Pin {{pin[0]}} & Pin
-                {{pin[1]}}{% endif %}
+                Pin {{pin[0]}} & Pin {{pin[1]}}{% else %}Control Pin {{pin[0]}}
+                & Pin {{pin[1]}}{% endif %}
               </p>
             </div>
             <div class="panel-footer">
-                <div class="col-md-4">
-                  <!-- Control open pin -->
-                  <form
-                    method="POST"
-                    data-message="Membuka {{ pin[2] }}"
-                    onsubmit="console.log('PanelId:', '{{ pin[1] }}'); updatePanelBody(event, '{{ pin[1] }}'); event.stopPropagation();"
-                    class="btn-space"
+              <div class="col-md-4">
+                <!-- Control open pin -->
+                <form
+                  method="POST"
+                  data-message="Membuka {{ pin[2] }}"
+                  onsubmit="console.log('PanelId:', '{{ pin[1] }}'); updatePanelBody(event, '{{ pin[1] }}'); event.stopPropagation();"
+                  class="btn-space"
+                >
+                  <input
+                    type="hidden"
+                    name="state"
+                    value="{% if pin[4] == 1 %}0{% else %}1{% endif %}"
+                  />
+                  <button
+                    type="submit"
+                    class="btn {% if pin[4] == 1 %}btn-primary{% else %}btn-danger{% endif %}"
+                    onclick="toggleOpenPin({{ pin[1] }}, {{ pin[4] }}); event.stopPropagation();"
+                    disabled
                   >
-                    <input
-                      type="hidden"
-                      name="state"
-                      value="{% if pin[4] == 1 %}0{% else %}1{% endif %}"
-                    />
-                    <button
-                      type="submit"
-                      class="btn {% if pin[4] == 1 %}btn-primary{% else %}btn-danger{% endif %}"
-                      onclick="toggleOpenPin({{ pin[1] }}, {{ pin[4] }}); event.stopPropagation();"
-                      disabled
-                    >
-                      {% if pin[4] == 1 %}Open{% else %}Stop Open{% endif %}
-                    </button>
-                  </form>
-                </div>
-                <div class="col-md-4">
-                  <!-- Stop pin operation -->
-                  <form method="POST" class="btn-space">
-                    <input type="hidden" name="state" value="1" />
-                    <button type="submit" class="btn btn-success">
-                      {% if pin[3] == 0 %}Close{% elif pin[4] == 0 %}Open{% elif
-                      pin[3] == 1 and pin[4] == 1 %}Stop{% else %}Stop{% endif
-                      %}
-                    </button>
-                  </form>
-                </div>
-                <div class="col-md-4">
-                  <!-- Control close pin -->
-                  <form
-                    method="POST"
-                    data-message="Menutup {{ pin[2] }}"
-                    onsubmit="console.log('PanelId:', '{{ pin[1] }}'); updatePanelBody(event, '{{ pin[1] }}'); event.stopPropagation();"
-                    class="btn-space"
+                    {% if pin[4] == 1 %}Open{% else %}Stop Open{% endif %}
+                  </button>
+                </form>
+              </div>
+              <div class="col-md-4">
+                <!-- Stop pin operation -->
+                <form method="POST" class="btn-space">
+                  <input type="hidden" name="state" value="1" />
+                  <button type="submit" class="btn btn-success">
+                    {% if pin[3] == 0 %}Close{% elif pin[4] == 0 %}Open{% elif
+                    pin[3] == 1 and pin[4] == 1 %}Stop{% else %}Stop{% endif %}
+                  </button>
+                </form>
+              </div>
+              <div class="col-md-4">
+                <!-- Control close pin -->
+                <form
+                  method="POST"
+                  data-message="Menutup {{ pin[2] }}"
+                  onsubmit="console.log('PanelId:', '{{ pin[1] }}'); updatePanelBody(event, '{{ pin[1] }}'); event.stopPropagation();"
+                  class="btn-space"
+                >
+                  <input
+                    type="hidden"
+                    name="state"
+                    value="{% if pin[3] == 1 %}0{% else %}1{% endif %}"
+                  />
+                  <button
+                    type="submit"
+                    class="btn {% if pin[3] == 1 %}btn-primary{% else %}btn-danger{% endif %}"
+                    onclick="toggleClosePin({{ pin[0] }}, {{ pin[3] }}); event.stopPropagation();"
                   >
-                    <input
-                      type="hidden"
-                      name="state"
-                      value="{% if pin[3] == 1 %}0{% else %}1{% endif %}"
-                    />
-                    <button
-                      type="submit"
-                      class="btn {% if pin[3] == 1 %}btn-primary{% else %}btn-danger{% endif %}"
-                      onclick="toggleClosePin({{ pin[0] }}, {{ pin[3] }}); event.stopPropagation();"
-                    >
-                      {% if pin[3] == 1 %}Close{% else %}Stop Close{% endif
-                      %}
-                    </button>
-                  </form>
-                </div>
-              <div  id="del" style="display: none;">
+                    {% if pin[3] == 1 %}Close{% else %}Stop Close{% endif %}
+                  </button>
+                </form>
+              </div>
+              <div id="del" style="display: none">
                 <form
                   action="/delete_pin/{{ pin[0] }}/{{ pin[1] }}"
                   method="POST"
@@ -103,7 +101,7 @@
           {% endfor %}
         </div>
       </div>
-      <div id="add"class="row" style="display: none;">
+      <div id="add" class="row" style="display: none">
         <div class="col-md-4">
           <button
             type="button"
@@ -181,7 +179,7 @@
         panelBody.innerHTML = "<p>Status: " + message + "</p>";
         console.log("Update panel body called for panelId:", panelId);
       }
-      
+
       // Fungsi untuk hide button
       function hideButton() {
         var x = document.getElementById("del");
@@ -194,7 +192,7 @@
           y.style.display = "none";
         }
       }
-      
+
       // Fungsi untuk mengubah status pin terbuka
       function toggleOpenPin(pinNumber, currentState) {
         const newState = currentState === 1 ? 0 : 1;
