@@ -112,7 +112,7 @@
           {% endfor %}
         </div>
       </div>
-      <div id="add" class="row" style+"display: none;">
+      <div id="add" class="row" style="display: none;">
         <div class="col-md-4">
           <button
             type="button"
@@ -192,7 +192,7 @@
       }
 
       // Fungsi untuk hide button
-      function hideButton() {
+      function hideButton(panelId) {
         var x = document.getElementById("del-" + panelId);
         let y = document.getElementById("add");
         if (x.style.display === "none" && y.style.display === "none") {
