@@ -50,7 +50,7 @@
                       type="submit"
                       class="btn {% if pin[4] == 1 %}btn-primary{% else %}btn-danger{% endif %}"
                       onclick="toggleOpenPin({{ pin[1] }}, {{ pin[4] }}); event.stopPropagation();"
-                      {% if pin[3] == 1 and pin[4] == 1 %}{% elif pin[4] == 0 and pin[3] == 1 %}{% elif pin[4] == 1 and pin[3] == 0 %}disabled{{%break%}}{{%endif%}}
+                      {% if pin[3] == 1 and pin[4] == 1 %}{% elif pin[4] == 0 and pin[3] == 1 %}{% elif pin[4] == 1 and pin[3] == 0 %}disabled{%break%}{%endif%}
                     >
                       {% if pin[4] == 1 %}Open{% else %}Stop Open{% endif %}
                     </button>
@@ -84,7 +84,7 @@
                       type="submit"
                       class="btn {% if pin[3] == 1 %}btn-primary{% else %}btn-danger{% endif %}"
                       onclick="toggleClosePin({{ pin[0] }}, {{ pin[3] }}); event.stopPropagation();"
-                      {% if pin[3] == 1 and pin[4] == 1 %}{% elif pin[3] == 0 and pin[4] == 1 %}{% elif pin[3] == 1 and pin[4] == 0 %}disabled{{%break%}}{{%endif%}}
+                      {% if pin[3] == 1 and pin[4] == 1 %}{% elif pin[3] == 0 and pin[4] == 1 %}{% elif pin[3] == 1 and pin[4] == 0 %}disabled{%break%}{%endif%}
                     >
                       {% if pin[3] == 1 %}Close{% else %}Stop Close{% endif
                       %}
