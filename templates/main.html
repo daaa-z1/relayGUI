@@ -27,8 +27,8 @@
               <p>
                 Status: {% if pin[3] == 0 %}Closing {{pin[2]}}{% elif pin[4] ==
                 0 %}Open {{pin[2]}}{% elif pin[3] == 1 and pin[4] == 1 %}Control
-                Pin {{[0]}} & Pin {{[1]}}{% else %}Control Pin {{[0]}} & Pin
-                {{[1]}}{% endif %}
+                Pin {{pin[0]}} & Pin {{pin[1]}}{% else %}Control Pin {{pin[0]}} & Pin
+                {{pin[1]}}{% endif %}
               </p>
             </div>
             <div class="panel-footer">
