@@ -59,7 +59,7 @@
                   <!-- Stop pin operation -->
                   <form method="POST" class="btn-space">
                     <input type="hidden" name="state" value="1" />
-                    <button type="submit" class="btn btn-success">
+                    <button type="submit" class="btn btn-success" disabled>
                       {% if pin[3] == 0 %}Close{% elif pin[4] == 0 %}Open{% elif
                       pin[3] == 1 and pin[4] == 1 %}Stop{% else %}Stop{% endif
                       %}
