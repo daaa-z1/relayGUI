@@ -25,10 +25,16 @@
             </div>
             <div class="panel-body" id="panel-body-{{ pin[1] }}">
               <p>
-                Status: {% if pin[3] == 0 %}Closing {{pin[2]}}{% elif pin[4] ==
-                0 %}Open {{pin[2]}}{% elif pin[3] == 1 and pin[4] == 1 %}Control
-                Pin {{pin[0]}} & Pin {{pin[1]}}{% else %}Control Pin {{pin[1]}}
-                & Pin {{pin[0]}}{% endif %}
+                Status:
+                {% if pin[3] == 0 %}
+                Closing {{pin[2]}}
+                {% elif pin[4] == 0 %}
+                Open {{pin[2]}}
+                {% elif pin[3] == 1 and pin[4] == 1 %}
+                Control Pin {{pin[0]}} & Pin {{pin[1]}}
+                {% else %}
+                Control Pin {{pin[1]}} & Pin {{pin[0]}}
+                {% endif %}
               </p>
             </div>
             <div class="panel-footer">
@@ -92,7 +98,7 @@
                   </form>
                 </div>
               </div>
-              <div  id="del" style="display: none;">
+              <div id="del-{{ pin[1] }}" style="display: none;">
                 <form
                   action="/delete_pin/{{ pin[0] }}/{{ pin[1] }}"
                   method="POST"
@@ -106,7 +112,7 @@
           {% endfor %}
         </div>
       </div>
-      <div id="add" class="row" style="display: none">
+      <div id="add" class="row">
         <div class="col-md-4">
           <button
             type="button"
@@ -187,7 +193,7 @@
 
       // Fungsi untuk hide button
       function hideButton() {
-        var x = document.getElementById("del");
+        var x = document.getElementById("del-" + panelId);
         let y = document.getElementById("add");
         if (x.style.display === "none" && y.style.display === "none") {
           x.style.display = "block";
@@ -266,7 +272,5 @@
           });
       }
     </script>
-    <!-- Latest compiled and minified JavaScript -->
-    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
   </body>
 </html>
