@@ -68,8 +68,7 @@
                     <input type="hidden" name="state" value="1" />
                     <button type="submit" class="btn btn-success" disabled>
                       {% if pin[3] == 0 %}Close{% elif pin[4] == 0 %}Open{% elif
-                      pin[3] == 1 and pin[4] == 1 %}Stop{% else %}Stop{% endif
-                      %}
+                      pin[3] == 1 and pin[4] == 1 %}Stop{% else %}Stop{% endif %}
                     </button>
                   </form>
                 </div>
@@ -191,15 +190,22 @@
         console.log("Update panel body called for panelId:", panelId);
       }
 
-      // Fungsi untuk hide button
-      function hideButton(panelId) {
+      // Fungsi untuk menampilkan delete button
+      function dellButton(panelId) {
         var x = document.getElementById("del-" + panelId);
-        let y = document.getElementById("add");
-        if (x.style.display === "none" && y.style.display === "none") {
+        if (x.style.display === "none") {
           x.style.display = "block";
-          y.style.display = "block";
         } else {
           x.style.display = "none";
+        }
+      }
+
+      // Fungsi untuk menampilkan add pin button
+      function addButton() {
+        let y = document.getElementById("add");
+        if (y.style.display === "none") {
+          y.style.display = "block";
+        } else {
           y.style.display = "none";
         }
       }
